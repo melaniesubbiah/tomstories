@@ -32,7 +32,7 @@ def implicit_accuracy(results: dict, dataset: dict, split="val"):
         gold = dataset[sid]["answer"]
         if pred is not None:
             correct += int(pred == gold)
-            total += 1
+        total += 1
     return correct / total if total else None
 
 
@@ -48,7 +48,7 @@ def description_rate(results: dict, dataset: dict, split="val"):
         pred = entry.get("pred")
         if pred is not None:
             description += int(pred == dataset[sid]["description_answer"])
-            total += 1
+        total += 1
     return description / total if total else None
 
 
@@ -64,7 +64,7 @@ def dialogue_rate(results: dict, dataset: dict, split="val"):
         pred = entry.get("pred")
         if pred is not None:
             description += int(pred == dataset[sid]["dialogue_answer"])
-            total += 1
+        total += 1
     return description / total if total else None
 
 
@@ -73,17 +73,10 @@ def plot(model_points, out_path):
 
     texts = []
     for name, vals in sorted(model_points.items()):
-        if '1b' in name:
-            continue
         x = vals["implicit_acc"]  * 100
-        #x = (vals["implicit_acc"] - .5)/.4
         y = vals["description_rate"] * 100
-        y2 = vals["dialogue_rate"] * 100
-        #ax.scatter(y, y2, s=90, color=MODE_COLORS['description'], zorder=3, alpha=x)
         ax.scatter(x, y, s=90, color='purple', zorder=3, alpha=0.7)
-        ax.scatter(x, y2, s=90, color=MODE_COLORS['dialogue'], zorder=3, alpha=0.7)
         texts.append(plt.text(x, y, name))
-        texts.append(plt.text(x, y2, name))
     adjust_text(
         texts,
         ensure_inside_axes=False,
@@ -94,8 +87,6 @@ def plot(model_points, out_path):
     ax.set_ylabel("Conflicted: description-aligned answer chosen (%)", fontsize=15)
     ax.tick_params(labelsize=15)
     ax.grid(alpha=0.25)
-    #ax.set_xlim(0, 100)
-    #ax.set_ylim(0, 100)
 
     plt.tight_layout()
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
