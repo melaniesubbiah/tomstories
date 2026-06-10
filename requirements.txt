@@ -1,0 +1,13 @@
+anthropic
+openai
+torch
+transformers
+scikit-learn
+matplotlib
+numpy
+scipy
+tqdm
+python-dotenv
+accelerate
+bitsandbytes
+datasets

@@ -1,0 +1,30 @@
+{
+  "emotions":
+    [
+      "emotion1",
+      "emotion2",
+      ...
+    ],
+  "fears":
+    [
+      "fear1",
+      "fear2",
+      ...
+    ],
+  "motivations":
+    [
+      ...
+    ],
+  "wounds":
+    [
+      ...
+    ],
+  "settings":
+    [
+      ...
+    ],
+  "relationships":
+    [
+      ...
+    ]
+}
