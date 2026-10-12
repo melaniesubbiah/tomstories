@@ -89,7 +89,7 @@ Generates and analyzes the indicator phrases (also called behavioral cues in the
 ```bash
 python interpretability/cue_analysis/generate_cues.py --all \
     --input data_gen/thesaurus/thesaurus.json \
-    --output interpretability/cue_analysis/cues.json --limit-per-category 50
+    --output interpretability/cue_analysis/cues.json --limit-per-category 25
 python interpretability/cue_analysis/cue_overlap.py \
     --cues interpretability/cue_analysis/cues.json --out results/cue_analysis
 ```
