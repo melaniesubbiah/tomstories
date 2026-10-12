@@ -1,81 +1,121 @@
 # ToMStories
 
-This repository provides code for the ToMStories paper: <link todo>.
+Code and data for the ToMStories paper: <link todo>.
 
-## Repository structure
+ToMStories is a Theory-of-Mind benchmark of short literary vignettes. Each vignette conveys
+a character's **wound**, **emotion**, **fear**, or **motivation** and asks a four-choice
+question about it. The implicit split conveys the mental state through subtext; the explicit
+split states it outright; the conflicted split makes dialogue and narration disagree.
 
-```
-tomstories_vignettes/   Benchmark datasets (JSON)
-data_gen/               Scripts to regenerate the datasets with the Anthropic API
-benchmark/              Evaluation scripts and analysis tools
-interpretability/       Activation steering and representation analysis scripts
-results/                (created at runtime) Output from experiments
-```
+## Setup
 
-## Quick start
+Python 3.9+.
 
-**Run the benchmark on a subset of ToMStories:**
 ```bash
-python benchmark/benchmark.py --all --mode both --tomstories_vignettes tomstories_vignettes/implicit_vignettes.json
+pip install -r requirements.txt
+pip install vllm          # local-model inference; needs a CUDA GPU
 ```
 
-**Analyse conflicted results after running the benchmark:**
+Put API keys in a `.env` file in the repo root (or export them). They are only needed for
+data generation and the LLM judges:
+
+```
+ANTHROPIC_API_KEY=...     # data generation
+OPENAI_API_KEY=...        # LLM judges
+```
+
+Run every script from the repo root, e.g. `python benchmark/benchmark.py`.
+
+## Repository layout
+
+```
+tomstories_vignettes/   the three benchmark splits (JSON)
+data_gen/               regenerate the splits with the Anthropic API
+benchmark/              evaluation and scoring
+interpretability/       probes, representation analysis, steering
+common/                 shared model registry, prompts, data IO, model hooks
+results/                created at runtime
+```
+
+### Benchmark
+
 ```bash
-python benchmark/analyse_conflicted.py
-python benchmark/plot_implicit_vs_conflicted.py
+# Multiple-choice and open-ended, all local models
+python benchmark/benchmark.py --all --mode both
+
+# API models are opt-in, never included in --all
+python benchmark/benchmark.py --models gpt-4o-mini --mode mc
+
+# Modality bias, after benchmarking the conflicted split
+python benchmark/benchmark.py --all --mode mc \
+    --tomstories_vignettes tomstories_vignettes/conflicted_vignettes.json
+python benchmark/score_conflicted.py
 ```
 
-**Analyse structural correlations in the dataset:**
+`benchmark.py --summarize` reprints the summary from existing result files without
+rerunning anything.
+
+### Interpretability
+
+`linear_probes.py` caches the activations the other scripts reuse and
+chooses the layer they all work at, saving it to `results/probes/<model>_best_layers.json`.
+Each steering step then consumes the previous one's output.
+
 ```bash
-python benchmark/analyse_answer_lexical_cues.py
-python benchmark/analyse_implicit_correlations.py
+# 1. Probes: fit every layer, cache activations, choose the layer
+python interpretability/linear_probes.py --models llama-3.1-8b
+
+# 2. Implicit vs. explicit representation structure
+python interpretability/analyze_embeddings.py --models llama-3.1-8b \
+    --probe_acts_path results/probes
+
+# 3. Steering vectors at the chosen layer
+python interpretability/steering/extract_vectors.py --models llama-3.1-8b \
+    --probe_acts_path results/probes
+
+# 4. Largest coefficient that stays coherent
+python interpretability/steering/tune_steering.py --models llama-3.1-8b
+
+# 5. Generate steered vignettes, then score them against the NRC lexicons
+python interpretability/steering/steer_vignettes.py --models llama-3.1-8b
+python interpretability/steering/analyze_steering.py \
+    --eil NRC-Emotion-Intensity-Lexicon-v1.txt
 ```
 
-**Regenerate dataset splits** (requires `ANTHROPIC_API_KEY` and manual entry of thesaurus entries):
+Pass `--layers` to any of steps 2-3 to override the chosen layer.
+
+### Indicator phrases
+Generates and analyzes the indicator phrases (also called behavioral cues in the repo).
+```bash
+python interpretability/cue_analysis/generate_cues.py --all \
+    --input data_gen/thesaurus/thesaurus.json \
+    --output interpretability/cue_analysis/cues.json --limit-per-category 50
+python interpretability/cue_analysis/cue_overlap.py \
+    --cues interpretability/cue_analysis/cues.json --out results/cue_analysis
+```
+
+### Regenerating the datasets
+
+Needs `ANTHROPIC_API_KEY` and a filled-in `data_gen/thesaurus/thesaurus.json`. Run implicit
+first as explicit pairs against it.
+
 ```bash
 python data_gen/generate_implicit.py
 python data_gen/generate_explicit.py
 python data_gen/generate_conflicted.py
 ```
 
-**Extract steering vectors:**
-```bash
-python interpretability/steering_vectors.py
-```
+## Data
 
-**Train linear probes across key layers:**
-```bash
-python interpretability/linear_probes.py --answer_per_style --choice_probe
-```
+| File | Samples | Description |
+|------|---------|-------------|
+| `tomstories_vignettes/implicit_vignettes.json`   | 1988 (1593 train / 395 val) | The mental state must be inferred from subtext |
+| `tomstories_vignettes/explicit_vignettes.json`   | 1988 (1593 train / 395 val) | Matched counterparts that state it outright, same options |
+| `tomstories_vignettes/conflicted_vignettes.json` | 1956 (1561 train / 395 val) | Dialogue and narration point to different answers |
 
-**Try steering:**
-```bash
-python interpretability/steer_chat.py --vector results/steering/Llama-3.1-8B-Instruct_layer20_vectors.pt --layer 20```
-```
-
-## Datasets
-
-| File                                 | Description                                                                                                                                                                                                                    |
-|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `data_gen/implicit_vignettes.json`   | Vignettes where the correct mental state must be inferred from subtext. Each entry has `scenario`, `question`, `answer`, `answer_options` (4-choice), `type`, `setting`, `relationship`, and `split` (train/val).              |
-| `data_gen/explicit_vignettes.json`   | Matched explicit counterparts: same concepts, settings, and answer options as implicit, but the mental state is described directly.                                                                                            |
-| `data_gen/conflicted_vignettes.json` | Vignettes where dialogue signals one answer and behavioral description signals a different answer. Used to measure modality bias. Each entry has `dialogue_answer` and `description_answer` instead of a single gold `answer`. |
-
-## Requirements / setup
-
-Python 3.9+ is required.
-
-```bash
-pip install -r requirements.txt
-```
-
-API keys (only needed for data generation and LLM judges):
-- `ANTHROPIC_API_KEY` — Claude API (data generation)
-- `OPENAI_API_KEY` — OpenAI API (LLM judge)
-
-Place keys in a `.env` file in the repo root or export them as environment variables.
-
-Open-source model inference uses [vLLM](https://github.com/vllm-project/vllm) (`pip install vllm`), which requires a CUDA GPU.
+Implicit and explicit entries share sample IDs and have `scenario`, `question`, `answer`,
+`answer_options` (4 choices), `type`, `setting`, `relationship`, `style`, and `split`.
+Conflicted entries replace `answer` with `dialogue_answer` and `description_answer`.
 
 ## Citation
 

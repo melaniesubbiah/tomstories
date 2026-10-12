@@ -1,88 +1,36 @@
 """
-Benchmark open-source models on ToMStories
+Evaluate models on ToMStories in multiple-choice or open-ended mode. Local models run
+through vLLM, API models through their provider. Open-ended answers are scored by
+embedding similarity to the options and/or an LLM judge.
+
+Outputs:
+  <results_dir>/<model>_<dataset>_<mode>_results.json   per-sample predictions and scores
+  <results_dir>/<dataset>_metrics.json                  per-model accuracy and related metrics
 """
 
 import argparse
 import asyncio
 import glob
-import json
 import os
-import random
 import re
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 from dotenv import load_dotenv
 from sklearn.metrics import balanced_accuracy_score, f1_score
 from tqdm import tqdm
-from adjustText import adjust_text
-from openai import AsyncOpenAI
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # repo root, for `common`
+from common.api import map_async, with_backoff
+from common.data import dataset_stem, load_json, load_vignettes, save_json
+from common.hf import load_vllm, supports_system_role
+from common.models import ALL_MODELS, MODELS, add_model_args, selected_models
+from common.prompts import (SYSTEM_PROMPT, SYSTEM_PROMPT_OE, TYPES, chat_messages,
+                            mc_question, oe_question, parse_answer, parse_answer_oe)
 
 load_dotenv()
-
-
-MODELS = {
-    "llama-3.2-1b":      {"hf_id": "meta-llama/Llama-3.2-1B-Instruct",           "params_b": 1},
-    "llama-3.2-3b":      {"hf_id": "meta-llama/Llama-3.2-3B-Instruct",           "params_b": 3},
-    "llama-3.1-8b":      {"hf_id": "meta-llama/Llama-3.1-8B-Instruct",           "params_b": 8},
-    "llama-3.1-70b":     {"hf_id": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4", "params_b": 70,  "tp": 2, "quantize": "awq_marlin"},
-    "llama-3.3-70b":     {"hf_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4", "params_b": 70,  "tp": 2, "quantize": "awq_marlin"},
-    "qwen-2.5-7b":       {"hf_id": "Qwen/Qwen2.5-7B-Instruct",                            "params_b": 7},
-    "qwen-2.5-72b":      {"hf_id": "Qwen/Qwen2.5-72B-Instruct-AWQ",                       "params_b": 72,  "tp": 2, "quantize": "awq_marlin"},
-    "mistral-7b":        {"hf_id": "mistralai/Mistral-7B-Instruct-v0.3",         "params_b": 7},
-    "gemma-2-9b":        {"hf_id": "google/gemma-2-9b-it",                       "params_b": 9},
-    "gemma-2-27b":       {"hf_id": "google/gemma-2-27b-it",                      "params_b": 27, "tp": 2},
-    "phi-4":             {"hf_id": "microsoft/phi-4",                            "params_b": 14},
-    "deepseek-r1-7b":    {"hf_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",   "params_b": 7},
-    "deepseek-r1-8b":    {"hf_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",  "params_b": 8},
-}
-
-SYSTEM_PROMPT = (
-    "You are an expert at literary analysis. You will read a series of short vignettes "
-    "and analyze the implicit meaning communicated by each scene. After reading the vignette, "
-    "answer the multiple choice question which follows. First reason about your answer and then "
-    "give your answer in <answer></answer> tags. Your answer should be the number of the correct "
-    "choice (1, 2, 3, or 4)."
-)
-
-SYSTEM_PROMPT_OE = (
-    "You are an expert at literary analysis. You will read a series of short vignettes "
-    "and analyze the implicit meaning communicated by each scene. After reading the vignette, "
-    "answer the question with a concise phrase (a few words). First reason about your answer, "
-    "then give your final answer in <answer></answer> tags."
-)
-
-MODE_COLORS = {"mc": "#4C72B0", "oe": "#DD8452"}
-
-
-def make_prompt(sample):
-    options = "".join(f"{i+1}. {sample['answer_options'][i]}\n" for i in range(4))
-    return f"Vignette: {sample['scenario']}\nQuestion: {sample['question']}\n{options}"
-
-
-def make_prompt_oe(sample):
-    return f"Vignette: {sample['scenario']}\nQuestion: {sample['question']}"
-
-
-def parse_answer(output):
-    """Extract 1-4 from <answer> tags, or fall back to last digit found."""
-    if "<answer>" in output and "</answer>" in output:
-        tag_content = output.split("<answer>")[1].split("</answer>")[0].strip()
-        digits = re.findall(r"[1-4]", tag_content)
-        if digits:
-            return int(digits[0])
-    tail = output[-30:]
-    digits = re.findall(r"[1-4]", tail)
-    if digits:
-        return int(digits[-1])
-    return None
-
-
-def parse_answer_oe(output):
-    """Extract free-form answer from <answer> tags, or fall back to last line."""
-    if "<answer>" in output and "</answer>" in output:
-        return output.split("<answer>")[1].split("</answer>")[0].strip()
-    return output.strip().split("\n")[-1].strip()
 
 
 # ---------------------------------------------------------------------------
@@ -131,23 +79,25 @@ JUDGE_USER_TEMPLATE = (
 
 
 def make_async_judge_fn(judge_model_name):
+    from openai import AsyncOpenAI
+
     client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    async def _call(user_msg):
-        r = await client.chat.completions.create(
-            model=cfg["api_id"], max_tokens=5, temperature=0,
-            messages=[
-                {"role": "system", "content": JUDGE_SYSTEM},
-                {"role": "user",   "content": user_msg},
-            ],
-        )
-        return r.choices[0].message.content
 
     async def judge_fn_async(pred, gold, question):
         user_msg = JUDGE_USER_TEMPLATE.format(question=question, gold=gold, pred=pred)
-        async def _inner():
-            return await _call(user_msg)
+
+        async def _call():
+            r = await client.chat.completions.create(
+                model=judge_model_name, max_tokens=5, temperature=0,
+                messages=[
+                    {"role": "system", "content": JUDGE_SYSTEM},
+                    {"role": "user",   "content": user_msg},
+                ],
+            )
+            return r.choices[0].message.content
+
         try:
-            raw   = await _call_with_backoff(_inner)
+            raw   = await with_backoff(_call)
             match = re.search(r"[0-4]", raw)
             score = int(match.group()) if match else 0
         except Exception as e:
@@ -158,65 +108,73 @@ def make_async_judge_fn(judge_model_name):
     return judge_fn_async
 
 
-def run_vllm_batch(hf_id, messages_list, tp=1, max_tokens=400, quantize=False):
-    from vllm import LLM, SamplingParams
+def run_api_batch(cfg, user_messages, system_prompt, max_tokens=400, concurrency=20):
+    """
+    One chat completion per user message from an API model, in input order.
 
-    llm_kwargs = dict(
-        model=hf_id,
-        tensor_parallel_size=tp,
-        dtype="float16" if quantize else "bfloat16",
-        gpu_memory_utilization=0.90,
-        max_model_len=8192,
+    A request that keeps failing yields None rather than an empty string, so the
+    sample is left unsaved and a rerun retries it instead of recording a
+    permanent parse failure.
+    """
+    provider, api_id = cfg["provider"], cfg["api_id"]
+
+    if provider == "openai":
+        from openai import AsyncOpenAI
+        client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+        async def call(user_msg):
+            r = await client.chat.completions.create(
+                model=api_id, max_tokens=max_tokens, temperature=0,
+                messages=chat_messages(system_prompt, user_msg),
+            )
+            return r.choices[0].message.content or ""
+
+    elif provider == "anthropic":
+        from anthropic import AsyncAnthropic
+        client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+        async def call(user_msg):
+            r = await client.messages.create(
+                model=api_id, max_tokens=max_tokens, temperature=0,
+                system=system_prompt,
+                messages=[{"role": "user", "content": user_msg}],
+            )
+            return "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+
+    else:
+        raise ValueError(f"unknown provider {provider!r} for API model {api_id!r}")
+
+    async def worker(user_msg):
+        try:
+            return await with_backoff(lambda: call(user_msg))
+        except Exception as e:
+            tqdm.write(f"\nAPI error (sample left unsaved for retry): {e}")
+            return None
+
+    return asyncio.run(map_async(user_messages, worker, concurrency,
+                                 desc=f"{api_id} ({provider})"))
+
+
+def run_vllm_batch(cfg, user_messages, system_prompt, max_tokens=400):
+    from vllm import SamplingParams
+
+    hf_id = cfg["hf_id"]
+    llm = load_vllm(
+        cfg,
+        dtype="float16" if cfg.get("quantize") else "bfloat16",
+        max_model_len=None if "gemma" in hf_id else 8192,
     )
-    if quantize:
-        llm_kwargs["quantization"] = quantize  # e.g. "awq_marlin"
 
-    llm = LLM(**llm_kwargs)
+    system_ok = supports_system_role(llm.get_tokenizer())
+    if not system_ok:
+        print("  Note: model does not support system role — merging into user message")
+    messages_list = [chat_messages(system_prompt, user_msg, system_ok)
+                     for user_msg in user_messages]
 
-    tokenizer = llm.get_tokenizer()
-    try:
-        tokenizer.apply_chat_template(
-            [{"role": "system", "content": "x"}, {"role": "user", "content": "x"}],
-            tokenize=False, add_generation_prompt=True,
-        )
-        supports_system = True
-    except Exception:
-        supports_system = False
-
-    if not supports_system:
-        merged = []
-        for msgs in messages_list:
-            msgs = list(msgs)
-            if msgs and msgs[0]["role"] == "system":
-                sys_text = msgs[0]["content"]
-                msgs = msgs[1:]
-                if msgs and msgs[0]["role"] == "user":
-                    msgs[0] = {"role": "user",
-                               "content": sys_text + "\n\n" + msgs[0]["content"]}
-            merged.append(msgs)
-        messages_list = merged
-
-    max_tokens = 1500 if 'deepseek' in hf_id else max_tokens
+    max_tokens = 1500 if "deepseek" in hf_id else max_tokens
     sampling_params = SamplingParams(temperature=0.01, max_tokens=max_tokens)
     outputs = llm.chat(messages_list, sampling_params, use_tqdm=True)
     return [o.outputs[0].text for o in outputs]
-
-
-async def _call_with_backoff(coro_fn, max_retries=6):
-    delay = 1.0
-    for attempt in range(max_retries):
-        try:
-            return await coro_fn()
-        except Exception as e:
-            name = type(e).__name__.lower()
-            msg  = str(e).lower()
-            is_rate_limit = ("ratelimit" in name or "resourceexhausted" in name
-                             or "rate limit" in msg or "429" in msg)
-            if not is_rate_limit or attempt == max_retries - 1:
-                raise
-            jitter = random.uniform(0, delay * 0.2)
-            await asyncio.sleep(delay + jitter)
-            delay = min(delay * 2, 60.0)
 
 
 async def _run_judge_batch_async(judge_fn_async, items, results, concurrency=20):
@@ -280,22 +238,18 @@ def process_output(output, sample, is_oe, embedder=None):
 
 def benchmark(model_name, samples, output_path, mode="mc",
               oe_scorer="embedding", judge_model="claude-sonnet-4-6",
-              tensor_parallel_size=None, api_concurrency=20):
-    cfg    = MODELS[model_name]
+              api_concurrency=20):
+    cfg    = ALL_MODELS[model_name]
     is_oe  = (mode == "oe")
     sys_prompt = SYSTEM_PROMPT_OE if is_oe else SYSTEM_PROMPT
-    make_p     = make_prompt_oe   if is_oe else make_prompt
+    make_p     = oe_question      if is_oe else mc_question
     use_embed  = is_oe and oe_scorer in ("embedding", "both")
     use_llm    = is_oe and oe_scorer in ("llm", "both")
 
     embedder        = load_embedder()             if use_embed else None
     async_judge_fn  = make_async_judge_fn(judge_model) if use_llm   else None
 
-    if os.path.exists(output_path):
-        with open(output_path) as f:
-            results = json.load(f)
-    else:
-        results = {}
+    results = load_json(output_path) if os.path.exists(output_path) else {}
 
     # Samples that need model inference (not yet run at all).
     pending_model = [(sid, s) for sid, s in samples if sid not in results]
@@ -342,44 +296,43 @@ def benchmark(model_name, samples, output_path, mode="mc",
                 print(f"Running async LLM judge on {len(judge_items)} cached outputs…")
                 asyncio.run(_run_judge_batch_async(async_judge_fn, judge_items, results,
                                                    concurrency=api_concurrency))
-        with open(output_path, "w") as f:
-            json.dump(results, f)
+        save_json(output_path, results)
 
     if not pending_model:
         return results
 
-
-    tp       = tensor_parallel_size if tensor_parallel_size is not None else cfg.get("tp", 1)
-    quantize = cfg.get("quantize", False)
-    print(f"\nLoading {cfg['hf_id']} with vLLM (tp={tp}, quantize={quantize})…")
-
-    messages_list = [
-        [
-            {"role": "system", "content": sys_prompt},
-            {"role": "user",   "content": make_p(s)},
-        ]
-        for _, s in pending_model
-    ]
-
-    raw_outputs = run_vllm_batch(cfg["hf_id"], messages_list, tp=tp, max_tokens=400,
-                                 quantize=quantize)
+    user_messages = [make_p(s) for _, s in pending_model]
+    if "provider" in cfg:
+        print(f"\nQuerying {cfg['api_id']} via {cfg['provider']} "
+              f"(concurrency={api_concurrency})…")
+        raw_outputs = run_api_batch(cfg, user_messages, sys_prompt, max_tokens=400,
+                                    concurrency=api_concurrency)
+    else:
+        print(f"\nLoading {cfg['hf_id']} with vLLM (tp={cfg.get('tp', 1)}, "
+              f"quantize={cfg.get('quantize', False)})…")
+        raw_outputs = run_vllm_batch(cfg, user_messages, sys_prompt, max_tokens=400)
 
     print(f"Processing {len(pending_model)} outputs…")
+    n_failed = 0
     for (sid, sample), output in zip(pending_model, raw_outputs):
+        if output is None:      # request failed; leave unsaved so a rerun retries it
+            n_failed += 1
+            continue
         results[sid] = process_output(output, sample, is_oe, embedder)
+    if n_failed:
+        print(f"  {n_failed} request(s) failed and were not saved; rerun to retry them")
 
     if use_llm:
         judge_items = [
             (sid, results[sid]["pred_raw"], sample["answer"], sample["question"])
             for sid, sample in pending_model
+            if sid in results
         ]
         print(f"Running async LLM judge on {len(judge_items)} outputs…")
         asyncio.run(_run_judge_batch_async(async_judge_fn, judge_items, results,
                                            concurrency=api_concurrency))
 
-    with open(output_path, "w") as f:
-        json.dump(results, f)
-
+    save_json(output_path, results)
     return results
 
 
@@ -425,7 +378,7 @@ def compute_metrics(results):
 
 
 def print_summary(all_metrics):
-    types   = ["wound", "emotion", "fear", "motivation"]
+    types   = TYPES
     has_sim = any("mean_sim"     in m for m in all_metrics.values())
     has_llm = any("llm_accuracy" in m for m in all_metrics.values())
     extra = ""
@@ -457,232 +410,43 @@ def print_summary(all_metrics):
         print(row)
     print("=" * len(header))
 
-def print_latex_table(all_metrics, human_dir="human_baseline/results",
-                      dataset_path="tomstories_vignettes/implicit_vignettes.json", split="val"):
-    """Print a LaTeX table with MC and OE columns, bolding per-column maxima."""
-    types      = ["wound", "emotion", "fear", "motivation"]
-    type_abbr  = ["Wound", "Emot.", "Fear", "Motiv."]
-
-    # Collect per-model MC and OE metrics, preserving MODELS registry order
-    model_order = list(MODELS.keys())
-    mc, oe = {}, {}
-    for key, m in all_metrics.items():
-        mname = m.get("_model_name", "")
-        mode  = _mode(key)
-        if mode == "mc":
-            mc[mname] = m
-        elif mode == "oe":
-            oe[mname] = m
-
-    rows = [n for n in model_order if n in mc or n in oe]
-
-    # Human baseline
-    human_row = None
-    dataset = json.load(open(dataset_path))
-    impl_files = glob.glob(os.path.join(human_dir, "*_implicit*.json"))
-    if impl_files:
-        combined_gold, combined_pred = [], []
-        by_type = defaultdict(lambda: {"gold": [], "pred": []})
-        for fp in impl_files:
-            res = json.load(open(fp))
-            for sid, entry in res.items():
-                if sid not in dataset:
-                    continue
-                if split != "all" and dataset[sid].get("split") != split:
-                    continue
-                if entry.get("flag"):
-                    continue
-                pred = entry.get("pred")
-                gold = dataset[sid]["answer"]
-                if pred is None:
-                    continue
-                combined_gold.append(gold)
-                combined_pred.append(pred)
-                by_type[dataset[sid]["type"]]["gold"].append(gold)
-                by_type[dataset[sid]["type"]]["pred"].append(pred)
-        if combined_gold:
-            human_row = {
-                "overall": float(np.mean([g == p for g, p in zip(combined_gold, combined_pred)])),
-                **{t: float(np.mean([g == p for g, p in zip(by_type[t]["gold"], by_type[t]["pred"])]))
-                   for t in types if by_type[t]["gold"]},
-            }
-
-    def acc(m, key):
-        if m is None:
-            return None
-        if key == "overall":
-            return m.get("overall", {}).get("accuracy")
-        return m.get(key, {}).get("accuracy")
-
-    def sim(m):
-        return m.get("mean_sim") if m else None
-
-    def llm(m):
-        return m.get("mean_llm_score") if m else None
-
-    # Find per-column maxima for bolding (model rows only, not human)
-    cols_mc = [("overall", "MC Overall")] + [(t, t) for t in types]
-    cols_oe = [("overall", "OE Overall")] + [(t, t) for t in types]
-    has_sim = any(sim(oe.get(n)) is not None for n in rows)
-    has_llm = any(llm(oe.get(n)) is not None for n in rows)
-
-    best_mc = {k: max((acc(mc.get(n), k) or 0) for n in rows) for k, _ in cols_mc}
-    best_oe = {k: max((acc(oe.get(n), k) or 0) for n in rows) for k, _ in cols_oe}
-    best_sim = max((sim(oe.get(n)) or 0) for n in rows) if has_sim else None
-    best_llm = max((llm(oe.get(n)) or 0) for n in rows) if has_llm else None
-
-    def fmt_acc(val, best, pct=True):
-        if val is None:
-            return "--"
-        s = f"{val*100:.1f}" if pct else f"{val:.2f}"
-        return r"\textbf{" + s + "}" if abs(val - best) < 1e-9 else s
-
-    def fmt_val(val, best):
-        if val is None:
-            return "--"
-        s = f"{val:.2f}"
-        return r"\textbf{" + s + "}" if abs(val - best) < 1e-9 else s
-
-    # Header
-    n_oe_cols = 5 + (1 if has_sim else 0) + (1 if has_llm else 0)
-    print()
-    print(r"\begin{tabular}{lc|cccc||c|cccc" + ("c" * (n_oe_cols - 5)) + "}")
-    print(r"\toprule")
-    oe_span = 5 + (1 if has_sim else 0) + (1 if has_llm else 0)
-    print(r"&  \multicolumn{5}{c||}{Multiple-Choice} &  "
-          r"\multicolumn{" + str(oe_span) + r"}{c}{Open-Ended}\\")
-    oe_extra = (r" & \textbf{EmbSim}" if has_sim else "") + \
-               (r" & \textbf{LLMScore}" if has_llm else "")
-    print(r"\textbf{Model} & \textbf{Overall} & \textbf{Wound} & \textbf{Emot.} & "
-          r"\textbf{Fear} & \textbf{Motiv.} & \textbf{Overall} & \textbf{Wound} & "
-          r"\textbf{Emot.} & \textbf{Fear} & \textbf{Motiv.}" + oe_extra + r" \\")
-    print(r"\midrule")
-
-    for name in rows:
-        m_mc = mc.get(name)
-        m_oe = oe.get(name)
-        cells = [name.replace("_", r"\_")]
-        # MC columns
-        cells.append(fmt_acc(acc(m_mc, "overall"), best_mc["overall"]))
-        for t in types:
-            cells.append(fmt_acc(acc(m_mc, t), best_mc[t]))
-        # OE columns
-        cells.append(fmt_acc(acc(m_oe, "overall"), best_oe["overall"]))
-        for t in types:
-            cells.append(fmt_acc(acc(m_oe, t), best_oe[t]))
-        if has_sim:
-            cells.append(fmt_val(sim(m_oe), best_sim))
-        if has_llm:
-            cells.append(fmt_val(llm(m_oe), best_llm))
-        print("  " + " & ".join(cells) + r" \\")
-
-    if human_row:
-        print(r"\midrule")
-        cells = ["Human"]
-        cells.append(f"{human_row['overall']*100:.1f}")
-        for t in types:
-            v = human_row.get(t)
-            cells.append(f"{v*100:.1f}" if v is not None else "--")
-        print("  " + " & ".join(cells) + r" \\")
-
-    print(r"\midrule\midrule")
-    print(r"\end{tabular}")
-
-
 def _mode(key):
-    """Extract 'mc' or 'oe' from a key like 'gpt-4o [mc]'."""
+    """Extract 'mc' or 'oe' from a key like 'gpt-4o-mini [mc]'."""
     return key.split("[")[-1].rstrip("]") if "[" in key else "mc"
 
 
-def plot_results(all_metrics, results_dir):
-    import matplotlib.pyplot as plt
+def save_metrics(all_metrics, path):
+    """
+    Write per-model metrics so tables and plots can be rebuilt by a separate script.
 
-    def _params(m):
-        return MODELS.get(m.get("_model_name", ""), {}).get("params_b")
-
-    open_models   = [(n, _params(m), m["overall"].get("accuracy", 0))
-                     for n, m in all_metrics.items() if _params(m)]
-    closed_models = [(n, m["overall"].get("accuracy", 0))
-                     for n, m in all_metrics.items() if not _params(m)]
-
-    has_closed = bool(closed_models)
-    fig, axes = plt.subplots(
-        1, 2 if has_closed else 1,
-        figsize=(14 if has_closed else 8, 6),
-        gridspec_kw={"width_ratios": [3, 1]} if has_closed else None,
-    )
-    ax_open = axes[0] if has_closed else axes
-
-    MODE_LABELS = {"mc": "Multiple choice", "oe": "Open ended"}
-
-    seen_modes = set()
-    texts = []
-    for name, params, acc in sorted(open_models, key=lambda x: x[1]):
-        mode  = _mode(name)
-        color = MODE_COLORS.get(mode, "#555555")
-        ax_open.scatter(params, acc * 100, color=color, s=90, zorder=3,
-                        label=MODE_LABELS.get(mode, mode) if mode not in seen_modes else None,
-                        alpha=0.7)
-        clean_name = name.split('[')[0].strip()
-        if '70b' in clean_name:
-            clean_name = clean_name.split('-')[0] + '-'.join(clean_name.split('-')[1:])
-        else:
-            clean_name = clean_name.split('-')[0] + '-'.join(clean_name.split('-')[-1:])
-        seen_modes.add(mode)
-        texts.append(ax_open.text(params, acc*100, clean_name))
-    ax_open.set_xscale("log")
-    adjust_text(
-        texts,
-        expand_points=(1.7, 1.7),
-        ensure_inside_axes=False,
-        arrowprops=dict(arrowstyle="-", color="gray", lw=0.5)
-    )
-
-
-    ax_open.set_xlabel("Parameters (billions, log scale)", fontsize=15)
-    ax_open.set_ylabel("Accuracy (%)", fontsize=15)
-    ax_open.grid(True, alpha=0.3)
-    ax_open.tick_params(labelsize=13)
-    ax_open.legend(title="Mode", fontsize=13, title_fontsize=13)
-
-    if has_closed:
-        ax_closed = axes[1]
-        seen_modes_closed = set()
-        for i, (name, acc) in enumerate(sorted(closed_models, key=lambda x: x[1])):
-            mode  = _mode(name)
-            color = MODE_COLORS.get(mode, "#555555")
-            ax_closed.scatter(i, acc * 100, color=color, s=90, marker="D", zorder=3,
-                              label=MODE_LABELS.get(mode, mode) if mode not in seen_modes_closed else None)
-            ax_closed.annotate(name, (i, acc * 100),
-                               fontsize=11.5, alpha=0.85, textcoords="offset points", xytext=(5, 3))
-            seen_modes_closed.add(mode)
-        ax_closed.set_xticks([])
-        ax_closed.set_xlabel("(size undisclosed)", fontsize=13)
-        ax_closed.set_title("Closed models", fontsize=16)
-        ax_closed.grid(True, alpha=0.3, axis="y")
-        ax_closed.tick_params(labelsize=13)
-        ax_closed.legend(title="Mode", fontsize=13, title_fontsize=13)
-
-    all_accs = [a for _, _, a in open_models] + [a for _, a in closed_models]
-    if all_accs:
-        lo = 0
-        hi = 100
-        for ax in ([ax_open, axes[1]] if has_closed else [ax_open]):
-            ax.set_ylim(lo, hi)
-
-    #fig.suptitle("ToM Reasoning Benchmark — Scale vs. Accuracy", fontsize=17)
-    plt.tight_layout()
-
-    save_path = os.path.join(results_dir, "scaling_plot.png")
-    plt.savefig(save_path, dpi=150, bbox_inches="tight")
-    print(f"Plot saved to {save_path}")
-    plt.show()
+    Each entry keeps the model key, mode, parameter count / provider, and every
+    computed score, which is everything the paper's tables and the accuracy-vs-scale
+    plot are derived from. Per-sample predictions stay in the
+    <model>_<dataset>_<mode>_results.json files written during the run.
+    """
+    out = {}
+    for key, m in all_metrics.items():
+        model_name = m.get("_model_name", key)
+        cfg = ALL_MODELS.get(model_name, {})
+        out[key] = {
+            "model":    model_name,
+            "mode":     _mode(key),
+            "params_b": cfg.get("params_b"),
+            "provider": cfg.get("provider"),
+            **{k: v for k, v in m.items() if k != "_model_name"},
+        }
+    save_json(path, out, indent=2)
+    print(f"\nMetrics → {path}")
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--models", nargs="+", choices=list(MODELS), metavar="MODEL")
-    parser.add_argument("--all", action="store_true", help="Run all registered models")
+    add_model_args(
+        parser, registry=ALL_MODELS,
+        help="Models to evaluate. Local models run through vLLM; API models "
+             "(gpt-4o-mini, claude-sonnet-4.6) run only when named here.",
+        all_help="Run all local models; API models stay opt-in via --models",
+    )
     parser.add_argument("--mode", choices=["mc", "oe", "both"], default="mc",
                         help="mc=multiple-choice, oe=open-ended, both=run both")
     parser.add_argument("--oe_scorer", choices=["embedding", "llm", "both"], default="both",
@@ -693,29 +457,27 @@ def main():
     parser.add_argument("--split",   choices=["train", "val", "all"], default="all")
     parser.add_argument("--max_samples", type=int, default=None)
     parser.add_argument("--results_dir", default="results/benchmark")
-    parser.add_argument("--tensor_parallel_size", type=int, default=None,
-                        help="Override tensor_parallel_size for vLLM (default: per-model registry value)")
     parser.add_argument("--api_concurrency", type=int, default=20,
                         help="Max concurrent requests for API models (default: 20)")
-    parser.add_argument("--latex", action="store_true",
-                        help="Print LaTeX table from existing result files and exit")
+    parser.add_argument("--summarize", action="store_true",
+                        help="Summarize existing result files without running any model, "
+                             "then exit")
     args = parser.parse_args()
 
-    # ── Standalone LaTeX table from existing result files ──────────────────
-    if args.latex:
-        dataset_stem = os.path.splitext(os.path.basename(args.tomstories_vignettes))[0]
-        with open(args.tomstories_vignettes) as f:
-            raw = json.load(f)
-        valid_sids = {k for k, v in raw.items()
-                      if args.split == "all" or v.get("split") == args.split}
+    ds_stem      = dataset_stem(args.tomstories_vignettes)
+    metrics_path = os.path.join(args.results_dir, f"{ds_stem}_metrics.json")
+
+    # ── Summary from existing result files ─────────────────────────────────
+    if args.summarize:
+        valid_sids = set(load_vignettes(args.tomstories_vignettes, args.split))
 
         all_metrics = {}
         for mode in ("mc", "oe"):
-            pattern = os.path.join(args.results_dir, f"*_{dataset_stem}_{mode}_results.json")
+            pattern = os.path.join(args.results_dir, f"*_{ds_stem}_{mode}_results.json")
             for fpath in sorted(glob.glob(pattern)):
                 stem = os.path.basename(fpath)
-                model_name = stem[: stem.index(f"_{dataset_stem}")]
-                results  = json.load(open(fpath))
+                model_name = stem[: stem.index(f"_{ds_stem}")]
+                results  = load_json(fpath)
                 filtered = {sid: e for sid, e in results.items() if sid in valid_sids}
                 if not filtered:
                     continue
@@ -724,46 +486,36 @@ def main():
                 all_metrics[key]["_model_name"] = model_name
 
         if not all_metrics:
-            print(f"No result files found in {args.results_dir}/ for dataset '{dataset_stem}'.")
+            print(f"No result files found in {args.results_dir}/ for dataset '{ds_stem}'.")
             return
-        print_latex_table(all_metrics, dataset_path=args.tomstories_vignettes, split=args.split)
+        print_summary(all_metrics)
+        save_metrics(all_metrics, metrics_path)
         return
 
-    if args.all:
-        model_names = list(MODELS)
-    elif args.models:
-        model_names = args.models
-    else:
-        parser.error("Specify --models, --all, or --latex")
+    # --all covers the local registry only, so it never spends API budget
+    model_names = selected_models(args, parser, registry=MODELS,
+                                  extra_hint=", or --summarize")
 
     modes = ["mc", "oe"] if args.mode == "both" else [args.mode]
 
     os.makedirs(args.results_dir, exist_ok=True)
 
-    with open(args.tomstories_vignettes) as f:
-        raw = json.load(f)
-
-    samples = list(raw.items())
-    if args.split != "all":
-        samples = [(k, v) for k, v in samples if v["split"] == args.split]
+    samples = list(load_vignettes(args.tomstories_vignettes, args.split).items())
     if args.max_samples:
         samples = samples[:args.max_samples]
 
     print(f"Evaluating {len(samples)} samples | models: {len(model_names)} | mode(s): {modes}")
-
-    dataset_stem = os.path.splitext(os.path.basename(args.tomstories_vignettes))[0]
 
     all_metrics = {}
     for mode in modes:
         print(f"\n{'='*60}\nMode: {mode.upper()}\n{'='*60}")
         for model_name in model_names:
             output_path = os.path.join(
-                args.results_dir, f"{model_name}_{dataset_stem}_{mode}_results.json"
+                args.results_dir, f"{model_name}_{ds_stem}_{mode}_results.json"
             )
             results = benchmark(
                 model_name, samples, output_path,
                 mode=mode, oe_scorer=args.oe_scorer, judge_model=args.judge_model,
-                tensor_parallel_size=args.tensor_parallel_size,
                 api_concurrency=args.api_concurrency,
             )
             valid_sids = {sid for sid, _ in samples}
@@ -775,8 +527,7 @@ def main():
             all_metrics[key]["_model_name"] = model_name
 
     print_summary(all_metrics)
-    print_latex_table(all_metrics, dataset_path=args.tomstories_vignettes, split=args.split)
-    plot_results(all_metrics, args.results_dir)
+    save_metrics(all_metrics, metrics_path)
 
 
 if __name__ == "__main__":

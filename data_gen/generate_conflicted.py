@@ -1,17 +1,24 @@
 """
-Generate "conflicted" vignettes where dialogue and description/narration
-point to different answers.
+Generate the conflicted vignettes: scenes whose dialogue points to one mental state while
+the narrated behavior points to another, for measuring modality bias.
+
+Outputs:
+  tomstories_vignettes/conflicted_vignettes.json   (--output), rewritten as samples complete
 """
 
 import argparse
 import asyncio
-import json
-import os
 import random
+import sys
+from pathlib import Path
 
-from anthropic import AsyncAnthropic, RateLimitError
 from dotenv import load_dotenv
-from tqdm import tqdm
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # repo root, for `common`
+from common.api import generate_vignettes
+from common.data import (add_combo_args, add_generation_args, load_json, resume,
+                         sample_answer_options, split_sizes)
+from common.prompts import TYPE_TO_THESAURUS_KEY, TYPES
 
 load_dotenv()
 
@@ -118,61 +125,11 @@ USER_PROMPT_TEMPLATE = (
     "Description {type_cap}: {description_answer}"
 )
 
-TYPE_TO_THESAURUS_KEY = {
-    "wound":      "wounds",
-    "emotion":    "emotions",
-    "fear":       "fears",
-    "motivation": "motivations",
-}
-
-
-async def call_claude_async(client, model, system, prompt, max_tokens=1024, temperature=0.8,
-                            max_retries=6):
-    delay = 1.0
-    for attempt in range(max_retries):
-        try:
-            response = await client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                system=system,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
-            )
-            return response.content[0].text
-        except RateLimitError:
-            if attempt == max_retries - 1:
-                raise
-            jitter = random.uniform(0, delay * 0.2)
-            await asyncio.sleep(delay + jitter)
-            delay = min(delay * 2, 60.0)
-
-
-def parse_scenario(output):
-    parts    = output.split("Question:")
-    scenario = parts[0]
-    scenario = scenario[scenario.find("Scenario:") + len("Scenario:"):].strip()
-    question = parts[-1].strip() if len(parts) > 1 else ""
-    return scenario, question
-
-
-def sample_answer_options(thesaurus, typ, dialogue_answer, description_answer, rng):
-
-    pool         = [a for a in thesaurus[TYPE_TO_THESAURUS_KEY[typ]]
-                    if a != dialogue_answer and a != description_answer]
-    distractors  = rng.sample(pool, 2)
-    options      = [dialogue_answer, description_answer] + distractors
-    rng.shuffle(options)
-    return options
-
-
 def build_combos(thesaurus, types, train_per_type, val_per_type, rng):
     combos = []
-    n_total = train_per_type + val_per_type
-
     for typ in types:
         answer_pool = thesaurus[TYPE_TO_THESAURUS_KEY[typ]]
-        for i in range(n_total):
-            split  = "train" if i < train_per_type else "val"
+        for i in range(train_per_type + val_per_type):
             d_ans, n_ans = rng.sample(answer_pool, 2)   # dialogue, narration
             combos.append({
                 "type":               typ,
@@ -180,94 +137,61 @@ def build_combos(thesaurus, types, train_per_type, val_per_type, rng):
                 "relationship":       rng.choice(thesaurus["relationships"]),
                 "dialogue_answer":    d_ans,
                 "description_answer": n_ans,
-                "split":              split,
+                "answer_options":     sample_answer_options(thesaurus, typ,
+                                                            [d_ans, n_ans], rng),
+                "split":              "train" if i < train_per_type else "val",
             })
     return combos
 
-async def main_async(args):
-    rng = random.Random(args.seed)
 
-    with open(args.thesaurus) as f:
-        thesaurus = json.load(f)
-
-    types = (
-        [args.type_filter] if args.type_filter
-        else ["wound", "emotion", "fear", "motivation"]
+def build_prompt(combo):
+    typ = combo["type"]
+    system = SYSTEM_PROMPTS[typ].format(
+        dialogue_answer=combo["dialogue_answer"],
+        description_answer=combo["description_answer"],
     )
+    prompt = USER_PROMPT_TEMPLATE.format(
+        setting=combo["setting"],
+        relationship=combo["relationship"],
+        type_cap=typ.capitalize(),
+        dialogue_answer=combo["dialogue_answer"],
+        description_answer=combo["description_answer"],
+    )
+    return system, prompt
 
-    train_per = args.train_per_type
-    val_per   = args.val_per_type
-    if args.max_per_type is not None:
-        total     = args.max_per_type
-        train_per = max(1, int(total * train_per / (train_per + val_per)))
-        val_per   = max(1, total - train_per)
+
+def build_record(combo, scenario, question):
+    return {
+        "setting":            combo["setting"],
+        "relationship":       combo["relationship"],
+        "type":               combo["type"],
+        "dialogue_answer":    combo["dialogue_answer"],
+        "description_answer": combo["description_answer"],
+        "scenario":           scenario,
+        "question":           question,
+        "answer_options":     combo["answer_options"],
+        "split":              combo["split"],
+    }
+
+
+async def main_async(args):
+    rng       = random.Random(args.seed)
+    thesaurus = load_json(args.thesaurus)
+    types     = [args.type_filter] if args.type_filter else TYPES
+    train_per, val_per = split_sizes(args.train_per_type, args.val_per_type,
+                                     args.max_per_type)
 
     combos = build_combos(thesaurus, types, train_per, val_per, rng)
     print(f"Combos to generate: {len(combos)}  "
           f"(train={train_per}, val={val_per}, per type, concurrency={args.concurrency})")
 
-    if os.path.exists(args.output):
-        with open(args.output) as f:
-            results = json.load(f)
-        print(f"Resuming: {len(results)} samples already done.")
-    else:
-        results = {}
-
-    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    semaphore = asyncio.Semaphore(args.concurrency)
-    lock = asyncio.Lock()
-
+    results = resume(args.output)
     pending = [(str(idx), combo) for idx, combo in enumerate(combos)
                if str(idx) not in results]
-    pbar = tqdm(total=len(pending), desc="generating conflicted vignettes")
 
-    async def process(sample_id, combo):
-        typ                = combo["type"]
-        dialogue_answer    = combo["dialogue_answer"]
-        description_answer = combo["description_answer"]
-
-        system = SYSTEM_PROMPTS[typ].format(
-            dialogue_answer=dialogue_answer,
-            description_answer=description_answer,
-        )
-        prompt = USER_PROMPT_TEMPLATE.format(
-            setting=combo["setting"],
-            relationship=combo["relationship"],
-            type_cap=typ.capitalize(),
-            dialogue_answer=dialogue_answer,
-            description_answer=description_answer,
-        )
-
-        async with semaphore:
-            try:
-                output = await call_claude_async(client, args.model, system, prompt)
-            except Exception as e:
-                tqdm.write(f"\nError on {sample_id}: {e}")
-                return
-
-        scenario, question = parse_scenario(output)
-        answer_options = sample_answer_options(
-            thesaurus, typ, dialogue_answer, description_answer, rng
-        )
-
-        async with lock:
-            results[sample_id] = {
-                "setting":            combo["setting"],
-                "relationship":       combo["relationship"],
-                "type":               typ,
-                "dialogue_answer":    dialogue_answer,
-                "description_answer": description_answer,
-                "scenario":           scenario,
-                "question":           question,
-                "answer_options":     answer_options,
-                "split":              combo["split"],
-            }
-            with open(args.output, "w") as f:
-                json.dump(results, f, indent=2)
-            pbar.update(1)
-
-    await asyncio.gather(*[process(sid, combo) for sid, combo in pending])
-    pbar.close()
+    await generate_vignettes(pending, build_prompt, build_record, args.output, results,
+                             args.model, args.concurrency,
+                             desc="generating conflicted vignettes", temperature=0.8)
     print(f"\nDone. {len(results)} conflicted vignettes saved to {args.output}")
 
 
@@ -276,19 +200,8 @@ def main():
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--output",        default="tomstories_vignettes/conflicted_vignettes.json")
-    parser.add_argument("--model",         default="claude-sonnet-4-6")
-    parser.add_argument("--thesaurus",     default="data_gen/thesaurus/thesaurus.json")
-    parser.add_argument("--train_per_type", type=int, default=400)
-    parser.add_argument("--val_per_type",   type=int, default=100)
-    parser.add_argument("--type_filter",
-                        choices=["wound", "emotion", "fear", "motivation"],
-                        default=None)
-    parser.add_argument("--max_per_type",  type=int, default=None,
-                        help="Cap total per type (train+val). Useful for smoke tests.")
-    parser.add_argument("--seed",          type=int, default=42)
-    parser.add_argument("--concurrency",   type=int, default=20,
-                        help="Max concurrent API requests (default: 20)")
+    add_generation_args(parser, "tomstories_vignettes/conflicted_vignettes.json")
+    add_combo_args(parser)
     args = parser.parse_args()
     asyncio.run(main_async(args))
 

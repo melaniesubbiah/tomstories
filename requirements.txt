@@ -3,9 +3,11 @@ openai
 torch
 transformers
 scikit-learn
-matplotlib
+sentence-transformers
 numpy
 scipy
+pandas
+statsmodels
 tqdm
 python-dotenv
 accelerate

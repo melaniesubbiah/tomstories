@@ -1,17 +1,22 @@
 """
-Analyse benchmark results on the conflicted vignette dataset.
+Score benchmark results on the conflicted vignettes, where dialogue and narration point to
+different answers, to measure which modality each model follows.
+
+Outputs:
+  <results_dir>/conflicted_scores.json   dialogue / description / distractor / no-parse counts
 """
 
 import argparse
 import glob
-import json
 import os
 import re
+import sys
+from pathlib import Path
 
-import numpy as np
-
-
-TYPES = ["emotion", "wound", "fear", "motivation"]
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # repo root, for `common`
+from common.data import load_json, load_vignettes, save_json
+from common.models import MODELS
+from common.prompts import TYPES
 
 
 def load_results(results_dir, models=None):
@@ -25,8 +30,7 @@ def load_results(results_dir, models=None):
         name = re.sub(r"_conflicted_vignettes_mc_results\.json$", "", os.path.basename(path))
         if models and name not in models:
             continue
-        with open(path) as f:
-            out[name] = json.load(f)
+        out[name] = load_json(path)
     return out
 
 
@@ -123,48 +127,23 @@ def print_results(all_scores, split="all"):
     print(sep)
 
 
-def print_latex_table(all_scores):
-    # Determine model order from MODELS registry if available, else sort
-    try:
-        from benchmark import MODELS
-        model_order = [m for m in MODELS if any(m in k for k in all_scores)]
-        ordered = [k for k in model_order if k in all_scores]
-        ordered += sorted(k for k in all_scores if k not in ordered)
-    except Exception:
-        ordered = sorted(all_scores)
+def save_scores(all_scores, path, split="all"):
+    """
+    Write the raw outcome counts per model so tables can be rebuilt elsewhere.
 
-    # Find per-column maxima for bolding
-    def vals(key):
-        return [all_scores[m][0][key] / all_scores[m][0]["total"] * 100
-                for m in ordered if all_scores[m][0]["total"] > 0]
-    best = {k: max(vals(k)) for k in ("dialogue", "description", "distractor", "no_parse")}
-
-    def fmt(n, total, best_val):
-        if total == 0:
-            return "--"
-        v = n / total * 100
-        s = f"{v:5.1f}"
-        return r"\textbf{" + s.strip() + "}" if abs(v - best_val) < 0.05 else s.strip()
-
-    print()
-    print(r"\begin{tabular}{lcccc}")
-    print(r"\toprule")
-    print(r"\textbf{Model} & \textbf{Dialogue} & \textbf{Description} & \textbf{Distractor} & \textbf{No Parse}  \\")
-    print(r"\midrule")
-    for name in ordered:
-        overall, _, _ = all_scores[name]
-        n = overall["total"]
-        cells = [
-            name,
-            fmt(overall["dialogue"],    n, best["dialogue"]),
-            fmt(overall["description"], n, best["description"]),
-            fmt(overall["distractor"],  n, best["distractor"]),
-            fmt(overall["no_parse"],    n, best["no_parse"]),
-        ]
-        print("  " + " & ".join(cells) + r" \\")
-
-    print(r"\bottomrule")
-    print(r"\end{tabular}")
+    Counts (not percentages) are saved at every breakdown the terminal summary
+    shows — overall, per question type, and per split — so any table or plot of
+    modality bias can be derived from this file alone.
+    """
+    out = {
+        "split": split,
+        "models": {
+            name: {"overall": overall, "by_type": by_type, "by_split": by_split}
+            for name, (overall, by_type, by_split) in all_scores.items()
+        },
+    }
+    save_json(path, out, indent=2)
+    print(f"\nScores → {path}")
 
 
 def main():
@@ -174,12 +153,12 @@ def main():
     parser.add_argument("--tomstories_vignettes",        default="tomstories_vignettes/conflicted_vignettes.json")
     parser.add_argument("--results_dir", default="results/benchmark")
     parser.add_argument("--models",      nargs="+", default=None,
-                        help="Restrict to these model names (default: all mc result files)")
+                        help="Restrict to these model names (default: every model with "
+                             "conflicted mc result files in --results_dir)")
     parser.add_argument("--split",       choices=["train", "val", "all"], default="all")
     args = parser.parse_args()
 
-    with open(args.tomstories_vignettes) as f:
-        dataset = json.load(f)
+    dataset = load_vignettes(args.tomstories_vignettes)
     print(f"Loaded {len(dataset)} conflicted samples from {args.tomstories_vignettes}")
 
     all_model_results = load_results(args.results_dir, models=args.models)
@@ -187,20 +166,27 @@ def main():
         print("No matching result files found.")
         return
 
+    # Registry order first, then any result files not in the registry
+    ordered  = [m for m in MODELS if m in all_model_results]
+    ordered += sorted(m for m in all_model_results if m not in ordered)
+
     all_scores = {}
-    for model_name, model_results in all_model_results.items():
+    for model_name in ordered:
         # Only keep sample IDs that are in the conflicted dataset
-        relevant = {sid: r for sid, r in model_results.items() if sid in dataset}
+        relevant = {sid: r for sid, r in all_model_results[model_name].items()
+                    if sid in dataset}
         if not relevant:
             print(f"  {model_name}: no overlapping sample IDs with conflicted dataset — skipping")
             continue
         all_scores[model_name] = score_model(relevant, dataset, split=args.split)
 
-    if all_scores:
-        print_results(all_scores, split=args.split)
-        print_latex_table(all_scores)
-    else:
+    if not all_scores:
         print("No scoreable results found.")
+        return
+
+    print_results(all_scores, split=args.split)
+    save_scores(all_scores, os.path.join(args.results_dir, "conflicted_scores.json"),
+                split=args.split)
 
 
 if __name__ == "__main__":

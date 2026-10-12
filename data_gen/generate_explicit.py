@@ -1,17 +1,22 @@
 """
-Generate explicit vignettes paired with the existing implicit dataset.
+Generate an explicit counterpart for each implicit vignette, keeping the same setting,
+relationship, answer and options but stating the mental state outright.
+
+Outputs:
+  tomstories_vignettes/explicit_vignettes.json   (--output), rewritten as samples complete
 """
 
 import argparse
 import asyncio
-import json
-import os
-import random
-import time
+import sys
+from pathlib import Path
 
-from anthropic import AsyncAnthropic, RateLimitError
 from dotenv import load_dotenv
-from tqdm import tqdm
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # repo root, for `common`
+from common.api import generate_vignettes
+from common.data import add_generation_args, load_vignettes, resume
+from common.prompts import VIGNETTE_PROMPT_TEMPLATE
 
 load_dotenv()
 
@@ -62,54 +67,33 @@ SYSTEM_PROMPTS = {
     ),
 }
 
-PROMPT_TEMPLATE = (
-    "Setting: {setting}\n"
-    "Relationship: {relationship}\n"
-    "{type_cap}: {answer}"
-)
+def build_prompt(sample):
+    typ = sample["type"]
+    return SYSTEM_PROMPTS[typ], VIGNETTE_PROMPT_TEMPLATE.format(
+        setting=sample["setting"],
+        relationship=sample["relationship"],
+        type_cap=typ.capitalize(),
+        answer=sample["answer"],
+    )
 
 
-async def call_claude_async(client,model, system, prompt, max_tokens=1024, temperature=0.7,
-                            max_retries=6):
-    delay = 1.0
-    for attempt in range(max_retries):
-        try:
-            response = await client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                system=system,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
-            )
-            return response.content[0].text
-        except RateLimitError:
-            if attempt == max_retries - 1:
-                raise
-            jitter = random.uniform(0, delay * 0.2)
-            await asyncio.sleep(delay + jitter)
-            delay = min(delay * 2, 60.0)
-
-
-def parse_scenario(output):
-    parts = output.split("Question:")
-    scenario_raw = parts[0]
-    scenario = scenario_raw[scenario_raw.find("Scenario:") + len("Scenario:"):].strip()
-    question = parts[-1].strip() if len(parts) > 1 else ""
-    return scenario, question
+def build_record(sample, scenario, question):
+    return {
+        "setting":        sample["setting"],
+        "relationship":   sample["relationship"],
+        "answer":         sample["answer"],
+        "scenario":       scenario,
+        "question":       question,
+        "type":           sample["type"],
+        "answer_options": sample["answer_options"],
+        "split":          sample["split"],
+        "style":          "explicit",
+    }
 
 
 async def main_async(args):
-    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-    with open(args.source) as f:
-        source = json.load(f)
-
-    if os.path.exists(args.output):
-        with open(args.output) as f:
-            results = json.load(f)
-        print(f"Resuming: {len(results)} samples already done.")
-    else:
-        results = {}
+    source  = load_vignettes(args.source)
+    results = resume(args.output)
 
     samples = list(source.items())
     if args.type_filter:
@@ -120,64 +104,20 @@ async def main_async(args):
     pending = [(k, v) for k, v in samples if k not in results]
     print(f"Samples to generate: {len(pending)}  (concurrency={args.concurrency})")
 
-    semaphore = asyncio.Semaphore(args.concurrency)
-    lock = asyncio.Lock()
-    pbar = tqdm(total=len(pending), desc="generating explicit vignettes")
-
-    async def process(sample_id, sample):
-        typ    = sample["type"]
-        system = SYSTEM_PROMPTS[typ]
-        prompt = PROMPT_TEMPLATE.format(
-            setting=sample["setting"],
-            relationship=sample["relationship"],
-            type_cap=typ.capitalize(),
-            answer=sample["answer"],
-        )
-        async with semaphore:
-            try:
-                output = await call_claude_async(client, args.model, system, prompt)
-            except Exception as e:
-                tqdm.write(f"\nError on {sample_id}: {e}")
-                return
-
-        scenario, question = parse_scenario(output)
-        record = {
-            "setting":        sample["setting"],
-            "relationship":   sample["relationship"],
-            "answer":         sample["answer"],
-            "scenario":       scenario,
-            "question":       question,
-            "type":           typ,
-            "answer_options": sample["answer_options"],
-            "split":          sample["split"],
-            "style":          "explicit",
-        }
-
-        async with lock:
-            results[sample_id] = record
-            with open(args.output, "w") as f:
-                json.dump(results, f, indent=2)
-            pbar.update(1)
-
-    await asyncio.gather(*[process(k, v) for k, v in pending])
-    pbar.close()
+    await generate_vignettes(pending, build_prompt, build_record, args.output, results,
+                             args.model, args.concurrency,
+                             desc="generating explicit vignettes")
     print(f"\nDone. {len(results)} explicit vignettes saved to {args.output}")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
+    add_generation_args(parser, "tomstories_vignettes/explicit_vignettes.json")
     parser.add_argument("--source", default="tomstories_vignettes/implicit_vignettes.json",
                         help="Implicit dataset to pair against")
-    parser.add_argument("--model", default="claude-sonnet-4-6")
-    parser.add_argument("--output", default="tomstories_vignettes/explicit_vignettes.json",
-                        help="Output file path")
     parser.add_argument("--max_samples", type=int, default=None,
                         help="Limit number of samples (useful for smoke-testing)")
-    parser.add_argument("--type_filter", choices=["wound", "emotion", "fear", "motivation"],
-                        default=None, help="Only generate for one question type")
-    parser.add_argument("--concurrency", type=int, default=20,
-                        help="Max concurrent API requests (default: 20)")
     args = parser.parse_args()
     asyncio.run(main_async(args))
 
