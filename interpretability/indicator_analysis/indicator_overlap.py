@@ -1,10 +1,10 @@
 """
-Clean the generated cues, embed and cluster them by behavior phrase, and measure how much
-cue vocabulary the other models share with the reference model.
+Clean the generated indicator phrases, embed and cluster them by head phrase, and measure
+how much indicator vocabulary the other models share with the reference model.
 
 Outputs:
-  <out>/cues_clustered.csv                 every cue with its cluster
-  <out>/clusters.csv                       cluster sizes, models and an example cue
+  <out>/indicators_clustered.csv           every indicator phrase with its cluster
+  <out>/clusters.csv                       cluster sizes, models and an example phrase
   <out>/summary.json                       sharing and reference-overlap statistics
   <out>/state_overlap_top<N>.{json,csv}    per-state overlap with the reference model
   <out>/model_overlap_top<N>[_frac].json   per-model overlap with the reference model
@@ -60,7 +60,7 @@ def _strip_debris(s):
 
 
 def _explode(raw):
-    """Split a 'cue' that is really several cues into its items."""
+    """Split an entry that is really several indicator phrases into its items."""
     s = raw.strip()
     if s.startswith("["):
         try:
@@ -71,15 +71,15 @@ def _explode(raw):
             pass
     if len(re.findall(r'"\s*,\s*"', s)) >= 2:                  # malformed / truncated arrays
         return re.split(r'"\s*,\s*"', s.strip("[]{} "))
-    segs = [x.strip() for x in s.split(",")]                    # comma-joined list of short cues
+    segs = [x.strip() for x in s.split(",")]                    # comma-joined list of short phrases
     if len(segs) >= 6 and all(0 < len(x.split()) <= 12 for x in segs):
         return segs
     return [s]
 
 
-def clean_cues(cues, log):
+def clean_indicators(indicators, log):
     out, seen = [], set()
-    for raw in cues:
+    for raw in indicators:
         parts = _explode(raw if isinstance(raw, str) else str(raw))
         if len(parts) > 1:
             log["split_lists"] += 1
@@ -104,7 +104,7 @@ def clean_cues(cues, log):
 
 
 # =============================================================================
-# 2. Behavior phrase + embedding
+# 2. Head phrase + embedding
 # =============================================================================
 _SUB = (r"(?:even )?(?:when|whenever|while|during|before|after|if|as if|as though|especially|"
         r"every time|each time|until|because|though|rather than|without)")
@@ -117,9 +117,9 @@ _COMMA_RE = re.compile(
 _SUBJ_RE = re.compile(r"^(?:they|she|he|the character)\s+(?=\w)", re.I)
 
 
-def behavior_phrase(cue):
+def head_phrase(indicator):
     """'Avoids eye contact during talks about family' -> 'Avoids eye contact'."""
-    s = _LEAD_SUB_RE.sub("", cue.strip().strip('"').strip())
+    s = _LEAD_SUB_RE.sub("", indicator.strip().strip('"').strip())
     head = _COMMA_RE.split(_HARD_RE.split(s)[0])[0].strip().rstrip(".,")
     head = _SUBJ_RE.sub("", head)
     return head if len(head.split()) >= 2 else s
@@ -140,7 +140,7 @@ def pct(x):
 
 
 def sharing_stats(rows, key):
-    """For each cue: how many OTHER models have a cue in the same cluster within `key`."""
+    """For each phrase: how many OTHER models have a phrase in the same cluster within `key`."""
     pool = collections.defaultdict(set)
     for r in rows:
         pool[key(r)].add(r["model"])
@@ -151,7 +151,7 @@ def sharing_stats(rows, key):
 
 
 def reference_overlap(rows, ref, opens):
-    """Per state and per open model overlap with the reference model's cues."""
+    """Per state and per open model overlap with the reference model's phrases."""
     op = [r for r in rows if r["model"] != ref]
     by = {lv: collections.defaultdict(set) for lv in LEVELS}             # cluster pool -> models
     for r in op:
@@ -162,20 +162,20 @@ def reference_overlap(rows, ref, opens):
             "type": lambda r: (r["category"], r["cluster"]),
             "overall": lambda r: r["cluster"]}
 
-    ref_cues = collections.defaultdict(list)                          # state -> ref cue clusters
+    ref_indicators = collections.defaultdict(list)                          # state -> ref phrase clusters
     per_state = collections.defaultdict(lambda: {lv: [] for lv in LEVELS})
     for r in rows:
         if r["model"] != ref:
             continue
         q = (r["category"], r["item"])
-        ref_cues[q].append(r["cluster"])
+        ref_indicators[q].append(r["cluster"])
         for lv in LEVELS:
             per_state[q][lv].append(len(by[lv][keyf[lv](r)]))
     n_open = len(opens)
     states = sorted(per_state)
     state_rows, dist = [], {}
     for q in states:
-        state_rows.append(dict(category=q[0], item=q[1], n_ref_cues=len(ref_cues[q]),
+        state_rows.append(dict(category=q[0], item=q[1], n_ref_indicators=len(ref_indicators[q]),
                                **{f"best_{lv}": max(per_state[q][lv]) for lv in LEVELS},
                                **{f"unmatched_{lv}": sum(k == 0 for k in per_state[q][lv]) for lv in LEVELS}))
     for lv in LEVELS:
@@ -196,12 +196,12 @@ def reference_overlap(rows, ref, opens):
         answered[r["model"]].add(q)
     binary, frac = {}, {}
     for m in opens:
-        qs = [q for q in ref_cues if q in answered[m]]
+        qs = [q for q in ref_indicators if q in answered[m]]
         pools = lambda q: {"question": m_pool["question"][(m, q)], "type": m_pool["type"][(m, q[0])],
                            "overall": m_pool["overall"][m]}
         b = {lv: 0.0 for lv in LEVELS}; f = {lv: 0.0 for lv in LEVELS}
         for q in qs:
-            P = pools(q); C = ref_cues[q]
+            P = pools(q); C = ref_indicators[q]
             for lv in LEVELS:
                 b[lv] += bool(set(C) & P[lv]); f[lv] += np.mean([c in P[lv] for c in C])
         n = max(len(qs), 1)
@@ -215,11 +215,11 @@ def reference_overlap(rows, ref, opens):
 # =============================================================================
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--cues", default="cues.json")
-    ap.add_argument("--out", default="results/cue_analysis")
+    ap.add_argument("--indicators", default="indicators.json")
+    ap.add_argument("--out", default="results/indicator_analysis")
     ap.add_argument("--threshold", type=float, default=0.5, help="cosine-distance cut (default 0.5)")
     ap.add_argument("--top-n", type=int, nargs="+", default=[5, 10],
-                    help="cue-list lengths for the reference-overlap analyses (default: 5 10)")
+                    help="phrase-list lengths for the reference-overlap analyses (default: 5 10)")
     ap.add_argument("--reference", default="claude", help="substring identifying the reference model")
     ap.add_argument("--embed-model", default="sentence-transformers/all-MiniLM-L6-v2")
     args = ap.parse_args()
@@ -227,31 +227,31 @@ def main():
     t0 = time.time()
 
     # Clean and parse
-    data = json.load(open(args.cues))
+    data = json.load(open(args.indicators))
     log, rows = collections.Counter(), []
     for cat, items in data.items():
         for item, per_model in items.items():
-            for model, cues in per_model.items():
-                for rank, cue in enumerate(clean_cues(cues, log)):
-                    rows.append(dict(model=model, category=cat, item=item, rank=rank, cue=cue,
-                                     behavior=behavior_phrase(cue)))
+            for model, indicators in per_model.items():
+                for rank, ind in enumerate(clean_indicators(indicators, log)):
+                    rows.append(dict(model=model, category=cat, item=item, rank=rank,
+                                     indicator=ind, head=head_phrase(ind)))
     models = sorted({r["model"] for r in rows})
     refs = [m for m in models if args.reference.lower() in m.lower()]
     if len(refs) != 1:
         sys.exit(f"--reference '{args.reference}' must match exactly one model; matched {refs}")
     ref = refs[0]; opens = [m for m in models if m != ref]
-    print(f"[1] {len(rows)} cues, {len(models)} models (reference: {ref}); cleaning: "
+    print(f"[1] {len(rows)} indicator phrases, {len(models)} models (reference: {ref}); cleaning: "
           f"{ {k: v for k, v in log.items() if v} }")
 
     # Embed and cluster
-    phrases = [r["behavior"] for r in rows]
+    phrases = [r["head"] for r in rows]
     fp = hashlib.sha1(("\n".join(phrases) + args.embed_model).encode()).hexdigest()[:16]
     cache = out / f"cache_{fp}.npz"
     if cache.exists():
         Z = np.load(cache)["Z"]; print("[2] using cached embeddings and clustering tree")
     else:
         X = embed(phrases, args.embed_model)
-        print(f"[2] embedded {X.shape[0]} behavior phrases")
+        print(f"[2] embedded {X.shape[0]} head phrases")
         Z = linkage(pdist(X.astype(np.float64), "cosine"), method="average")
         np.savez_compressed(cache, Z=Z, X=X)
     lab = fcluster(Z, args.threshold, criterion="distance")
@@ -261,40 +261,40 @@ def main():
         r["cluster"] = remap[l]
     sizes = collections.Counter(r["cluster"] for r in rows)
     print(f"[3] threshold {args.threshold}: {len(order)} clusters, "
-          f"{100 * sum(v == 1 for v in sizes.values()) / len(rows):.1f}% singleton cues")
+          f"{100 * sum(v == 1 for v in sizes.values()) / len(rows):.1f}% singleton phrases")
 
-    with open(out / "cues_clustered.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["model", "category", "item", "rank", "cue", "behavior", "cluster"])
+    with open(out / "indicators_clustered.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["model", "category", "item", "rank", "indicator", "head", "cluster"])
         w.writeheader(); w.writerows(rows)
     members = collections.defaultdict(list)
     for r in rows:
         members[r["cluster"]].append(r)
     with open(out / "clusters.csv", "w", newline="") as f:
-        w = csv.writer(f); w.writerow(["cluster", "size", "n_models", "n_reference_cues", "example"])
+        w = csv.writer(f); w.writerow(["cluster", "size", "n_models", "n_reference_indicators", "example"])
         for c in range(len(order)):
             ms = members[c]
-            ex = collections.Counter(normalize(r["behavior"]) for r in ms).most_common(1)[0][0]
+            ex = collections.Counter(normalize(r["head"]) for r in ms).most_common(1)[0][0]
             w.writerow([c, len(ms), len({r["model"] for r in ms}), sum(r["model"] == ref for r in ms), ex])
 
     # Analysis of overlap
     kq = lambda r: (r["category"], r["item"], r["cluster"])
     kt = lambda r: (r["category"], r["cluster"])
     ka = lambda r: r["cluster"]
-    summary = dict(cues=len(rows), models=len(models), reference=ref, threshold=args.threshold,
+    summary = dict(indicators=len(rows), models=len(models), reference=ref, threshold=args.threshold,
                    clusters=len(order), cleaning={k: v for k, v in log.items() if v},
-                   singleton_cue_pct=round(100 * sum(v == 1 for v in sizes.values()) / len(rows), 2))
+                   singleton_indicator_pct=round(100 * sum(v == 1 for v in sizes.values()) / len(rows), 2))
     for n in args.top_n:
         R = [r for r in rows if r["rank"] < n]
-        block = {"cues": len(R),
+        block = {"indicators": len(R),
                  "vocabulary_sharing_all_models": {
                      "same_state": sharing_stats(R, kq), "same_type": sharing_stats(R, kt),
                      "any_state": sharing_stats(R, ka)},
                  "by_type": {}}
         state_rows, dist, all_k, binary, frac = reference_overlap(R, ref, opens)
-        block["reference_cues_unmatched_pct"] = {lv: pct(all_k[lv] == 0) for lv in LEVELS}
+        block["reference_indicators_unmatched_pct"] = {lv: pct(all_k[lv] == 0) for lv in LEVELS}
         block["states"] = {lv: {"any_overlap_pct": round(100 - dist[lv]["exact"][0], 2),
-                                "best_cue_7plus_models_pct": dist[lv]["at_least"][7] if len(opens) >= 7 else None,
-                                "median_models_best_cue": dist[lv]["median"]} for lv in LEVELS}
+                                "best_indicator_7plus_models_pct": dist[lv]["at_least"][7] if len(opens) >= 7 else None,
+                                "median_models_best_indicator": dist[lv]["median"]} for lv in LEVELS}
         block["per_model_overlap_mean_pct"] = {lv: round(float(np.mean([binary[m][lv] for m in opens])), 2)
                                                for lv in LEVELS}
         for cat in sorted({r["category"] for r in R}):
@@ -302,10 +302,10 @@ def main():
             sr = [s for s in state_rows if s["category"] == cat]
             block["by_type"][cat] = {
                 "same_state": sharing_stats(Rc, kq), "same_type": sharing_stats(Rc, kt),
-                "reference_cues_unmatched_same_state_pct": round(
-                    100 * sum(s["unmatched_question"] for s in sr) / max(sum(s["n_ref_cues"] for s in sr), 1), 2),
-                "states_best_cue_3plus_models_same_state_pct": pct([s["best_question"] >= 3 for s in sr]),
-                "median_models_best_cue_same_state": float(np.median([s["best_question"] for s in sr]))}
+                "reference_indicators_unmatched_same_state_pct": round(
+                    100 * sum(s["unmatched_question"] for s in sr) / max(sum(s["n_ref_indicators"] for s in sr), 1), 2),
+                "states_best_indicator_3plus_models_same_state_pct": pct([s["best_question"] >= 3 for s in sr]),
+                "median_models_best_indicator_same_state": float(np.median([s["best_question"] for s in sr]))}
         summary[f"top{n}"] = block
 
         json.dump(dist, open(out / f"state_overlap_top{n}.json", "w"), indent=1)
@@ -314,10 +314,10 @@ def main():
         json.dump(binary, open(out / f"model_overlap_top{n}.json", "w"), indent=1)
         json.dump(frac, open(out / f"model_overlap_top{n}_frac.json", "w"), indent=1)
         s = block
-        print(f"[4] first {n} cues: median other models sharing a cue (any state) "
+        print(f"[4] first {n} phrases: median other models sharing a phrase (any state) "
               f"{s['vocabulary_sharing_all_models']['any_state']['median_other_models']:g}; "
-              f"reference cues unmatched (same state) {s['reference_cues_unmatched_pct']['question']}%; "
-              f"median open models sharing best reference cue (same state) {s['states']['question']['median_models_best_cue']:g}; "
+              f"reference phrases unmatched (same state) {s['reference_indicators_unmatched_pct']['question']}%; "
+              f"median open models sharing best reference phrase (same state) {s['states']['question']['median_models_best_indicator']:g}; "
               f"mean per-model same-state overlap {s['per_model_overlap_mean_pct']['question']}%")
     json.dump(summary, open(out / "summary.json", "w"), indent=1)
     print(f"done in {time.time() - t0:.0f}s -> {out}/")

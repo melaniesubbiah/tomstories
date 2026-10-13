@@ -32,7 +32,7 @@ Run every script from the repo root, e.g. `python benchmark/benchmark.py`.
 tomstories_vignettes/   the three benchmark splits (JSON)
 data_gen/               regenerate the splits with the Anthropic API
 benchmark/              evaluation and scoring
-interpretability/       probes, representation analysis, steering
+interpretability/       probes, representation analysis, steering, indicator phrases
 common/                 shared model registry, prompts, data IO, model hooks
 results/                created at runtime
 ```
@@ -85,13 +85,16 @@ python interpretability/steering/analyze_steering.py \
 Pass `--layers` to any of steps 2-3 to override the chosen layer.
 
 ### Indicator phrases
-Generates and analyzes the indicator phrases (also called behavioral cues in the repo).
+
+Independent of the above. `generate_indicators.py` first, then `indicator_overlap.py`.
+
 ```bash
-python interpretability/cue_analysis/generate_cues.py --all \
+python interpretability/indicator_analysis/generate_indicators.py --all \
     --input data_gen/thesaurus/thesaurus.json \
-    --output interpretability/cue_analysis/cues.json --limit-per-category 25
-python interpretability/cue_analysis/cue_overlap.py \
-    --cues interpretability/cue_analysis/cues.json --out results/cue_analysis
+    --output interpretability/indicator_analysis/indicators.json --limit-per-category 25
+python interpretability/indicator_analysis/indicator_overlap.py \
+    --indicators interpretability/indicator_analysis/indicators.json \
+    --out results/indicator_analysis
 ```
 
 ### Regenerating the datasets

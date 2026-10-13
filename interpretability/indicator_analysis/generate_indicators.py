@@ -1,9 +1,9 @@
 """
-Ask each model for subtle behavioral cues that would show a wound, fear, motivation or
+Ask each model for subtle indicator phrases that would show a wound, fear, motivation or
 emotion without naming it, for a sample of thesaurus entries.
 
 Outputs:
-  <output>   {category: {item: {model: [cues]}}}, rewritten after each model
+  <output>   {category: {item: {model: [phrases]}}}, rewritten after each model
 """
 
 import argparse
@@ -182,12 +182,12 @@ def run_model(
         results: Dict[str, List[str]] = {}
         n_empty = 0
         for task, out in zip(tasks, outputs):
-            cues = extract_json_array(out.outputs[0].text)
-            if not cues:
+            phrases = extract_json_array(out.outputs[0].text)
+            if not phrases:
                 n_empty += 1
-            results[f'{task["category"]}::{task["item"]}'] = cues
+            results[f'{task["category"]}::{task["item"]}'] = phrases
         if n_empty:
-            print(f"  [warn] {n_empty}/{len(tasks)} items produced no parseable cues",
+            print(f"  [warn] {n_empty}/{len(tasks)} items produced no parseable phrases",
                   file=sys.stderr)
     finally:
         destroy_vllm(llm)
@@ -257,16 +257,16 @@ def run_api_model(
         for i, fut in enumerate(as_completed(futures), 1):
             task = futures[fut]
             try:
-                cues = extract_json_array(fut.result())
+                phrases = extract_json_array(fut.result())
             except Exception as e:
                 errors.append((task, e))
                 if len(errors) == 1:   # surface the first failure right away (auth, model id, network…)
                     print(f"  [warn] request failed for {task['category']}::{task['item']}: {e!r}",
                           file=sys.stderr, flush=True)
             else:
-                if not cues:
+                if not phrases:
                     n_empty += 1
-                results[f'{task["category"]}::{task["item"]}'] = cues
+                results[f'{task["category"]}::{task["item"]}'] = phrases
             if i % report_every == 0 or i == len(tasks):
                 elapsed = time.time() - t0
                 eta = elapsed / i * (len(tasks) - i)
@@ -274,7 +274,7 @@ def run_api_model(
                       f"({elapsed:.0f}s elapsed, ~{eta:.0f}s left)", flush=True)
 
     if n_empty:
-        print(f"  [warn] {n_empty}/{len(tasks)} items produced no parseable cues", file=sys.stderr)
+        print(f"  [warn] {n_empty}/{len(tasks)} items produced no parseable phrases", file=sys.stderr)
     if errors:
         print(f"  [warn] {len(errors)}/{len(tasks)} requests failed and were skipped "
               f"(rerun to retry them). First error: {errors[0][1]!r}", file=sys.stderr)
@@ -287,13 +287,13 @@ def run_api_model(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate implicit behavioral/physical cues for wounds/fears/"
+        description="Generate implicit indicator phrases for wounds/fears/"
                     "motivations/emotions using local vLLM models."
     )
     parser.add_argument("--input", required=True, type=Path,
                         help="Path to the taxonomy JSON file.")
     parser.add_argument("--output", required=True, type=Path,
-                        help="Path to write the generated cues JSON (updated after each model).")
+                        help="Path to write the generated phrases JSON (updated after each model).")
     parser.add_argument("--categories", nargs="+",
                         default=["wounds", "fears", "motivations", "emotions"],
                         help="Which top-level keys in the input JSON to process.")
@@ -305,7 +305,7 @@ def main():
         all_help="Run all local models (the default); API models stay opt-in via --models",
     )
     parser.add_argument("--per-item", type=int, default=6,
-                        help="How many cues to request per item per model.")
+                        help="How many phrases to request per item per model.")
     parser.add_argument("--max-tokens", type=int, default=400,
                         help="Max new tokens per generation (raise for reasoning models).")
     parser.add_argument("--limit-per-category", type=int, default=None,
@@ -377,10 +377,10 @@ def main():
             print(f"[error] {model_key} failed: {e}", file=sys.stderr)
             continue
 
-        for flat_key, cues in per_task_results.items():
+        for flat_key, phrases in per_task_results.items():
             category, item = flat_key.split("::", 1)
             all_results.setdefault(category, {}).setdefault(item, {})
-            all_results[category][item][model_key] = cues
+            all_results[category][item][model_key] = phrases
 
         args.output.write_text(json.dumps(all_results, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"  saved progress to {args.output}")
