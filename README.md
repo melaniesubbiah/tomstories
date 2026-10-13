@@ -82,7 +82,7 @@ python interpretability/steering/analyze_steering.py \
     --eil NRC-Emotion-Intensity-Lexicon-v1.txt
 ```
 
-Pass `--layers` to any of steps 2-3 to override the chosen layer.
+Pass `--layers` to any of steps 2-3 to override the chosen layer. Our tuned steering coefficients and steered vignettes are saved in results/steering_coherence and results/steered_vignettes.
 
 ### Indicator phrases
 

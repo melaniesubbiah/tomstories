@@ -1,0 +1,717 @@
+{
+  "meta": {
+    "model": "gemma-2-9b",
+    "condition": "explicit",
+    "layer": 22,
+    "coeff": -232.43738251953124,
+    "coeff_source": "shared",
+    "coeff_scale": 1.0,
+    "vector": "results/steering/gemma-2-9b_layer22_vectors.pt",
+    "vector_key": "overall",
+    "normalized": true,
+    "max_tokens": 512,
+    "seed": 13743846335
+  },
+  "vignettes": {
+    "1892": {
+      "setting": "factory",
+      "relationship": "caregiver and client",
+      "answer": "taking what one is owed (dark)",
+      "type": "motivation",
+      "output": "The whirring of machinery filled the cavernous space, a symphony of industry that drowned out any sound of protest.  \n\n\"It's time,\" I said, my voice a hollow echo in the vast hall.\n\nHe stared at me, his eyes wide and unblinking. \"No,\" he croaked, his voice a raspy whisper.\n\n\"You know what I'm here for,\" I said, a grim smile spreading across my face.\n\nHe was my client, of course. My job was to help him, to guide him back to health. But that was a long time ago.\n\n\"Please,\" he pleaded, his hand reaching out to me.\n\nI took his hand, my grip tight. \"This is what you deserve,\" I said.\n\nHe was a shell of his former self, his body ravaged by illness. He was mine. \n\n\"You're owed nothing,\" he said, his voice a broken plea.\n\nI laughed, the sound echoing through the factory. \"You're owed nothing?\"\n\nHe was right, of course. But I needed to take what was mine. \n\n\n"
+    },
+    "1494": {
+      "setting": "courtroom",
+      "relationship": "siblings",
+      "answer": "being unsafe",
+      "type": "fear",
+      "output": "The courtroom was a cacophony of noise. The air was thick with the scent of stale coffee and the shouts of the judge.  \n\n\"This is not a game!\" the judge bellowed.\n\n\"I told you, I didn't do it!\" Michael yelled back, his voice cracking.\n\nSarah watched, her heart pounding in her chest. She was safe, she knew. This was just a courtroom. But the fear, primal and raw, clawed at her throat.\n\n\"Sarah!\" Michael shouted, his face pale.\n\nShe ran forward, pushing through the crowd.\n\n\"Michael!\"\n\nHe was surrounded by men in blue uniforms, their faces grim.\n\n\"It's not safe!\" Sarah screamed. \n\n\n"
+    },
+    "1255": {
+      "setting": "hospital",
+      "relationship": "benefactor and recipient",
+      "answer": "being unsafe",
+      "type": "fear",
+      "output": "The sterile white walls seemed to close in on me, the fluorescent lights buzzing overhead like a swarm of angry bees. I stared at the ceiling, my heart hammering against my ribs. \n\n\"It's okay, John. This is just a check-up.\"\n\nThe words, though familiar, did nothing to quell the terror that gripped me. I was safe here, I knew. This was the place where I was supposed to be, where I was meant to be healed. But the fear, primal and raw, pulsed through me like a live wire.\n\n\"John?\"\n\nI looked up, my gaze meeting the kind, familiar face of Mr. Henderson. He was my benefactor, the man who had saved me from the streets, given me a new life.\n\n\"Mr. Henderson,\" I croaked, my voice a mere whisper.\n\nHe smiled, his face etched with concern. \"You're safe here, John. You're home.\"\n\nHome. The word echoed in my ears, a painful reminder of the life I had left behind. A life where I had been surrounded by danger, where I had been hunted.\n\n\"I'm not safe,\" I said, my voice cracking.\n\nHe reached out, his hand engulfing mine in a warm grip. \"John, you're safe.\"\n\nI looked at him, my eyes wide with terror. \"I'm not safe.\"\n\n\n"
+    },
+    "1007": {
+      "setting": "pharmacy",
+      "relationship": "principal and teacher",
+      "answer": "one's genetics",
+      "type": "fear",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the rows of colourful bottles. Principal Thompson, a towering figure in a crisp suit, stood beside Mr. Davis, his hand hovering over a small, white box.\n\n\"This is it, Mr. Davis,\" he said, his voice booming.\n\nMr. Davis, a wiry man with a shock of red hair, stared at the box, his face pale. He couldn't move.\n\n\"It's just a test,\" Principal Thompson said, his voice gentle.\n\nMr. Davis knew. He knew it was just a test.\n\n\"Mr. Davis?\"\n\nHe looked up, his eyes wide with terror.\n\n\"It's your genetics,\" Principal Thompson said, his voice a low rumble.\n\nMr. Davis swallowed, his throat dry.\n\n\"It's just a test,\" he whispered.\n\nHe was a teacher, a man who dedicated his life to educating the next generation. He couldn't let his fear show.\n\n\"Mr. Davis?\"\n\nHe reached out, his hand trembling, and took the box. \n\n\n"
+    },
+    "285": {
+      "setting": "indoor shooting range",
+      "relationship": "service provider and customer",
+      "answer": "losing a limb",
+      "type": "wound",
+      "output": "The echoing clang of metal on metal reverberated through the indoor range.  \n\n\"That's it, sir. One shot left.\"\n\nJohn stared at the target, a giant silhouette of a man, its gaping mouth a silent scream. He gripped the gun tighter, his calloused hand trembling. \n\n\"One shot left,\" he whispered, his voice hoarse.\n\nHe was here for a reason. He couldn't escape the past, no matter how far he travelled. \n\n\"Sir?\"\n\nJohn looked up, his face pale.\n\n\"One shot left.\" \n\n\nHe was a service provider, a man who helped others. He couldn't let this happen again. \n\n\"One shot left,\" he said, his voice echoing in the vast space. \n"
+    },
+    "443": {
+      "setting": "lake",
+      "relationship": "master and apprentice",
+      "answer": "infertility",
+      "type": "wound",
+      "output": "The air was thick with the scent of pine needles and the rhythmic lapping of water against the wooden dock. Master Kai stood at the edge, his weathered face turned towards the vast expanse of the lake, a single tear tracing a path down his cheek.\n\n\"Master,\" a voice called out, echoing across the water.\n\nKai turned, a smile spreading across his face. \"Apprentice,\" he said, his voice booming.\n\nThe apprentice, a young man named Ren, stood beside him, his eyes wide with awe.\n\n\"Master, this is the lake,\" Ren said, his voice filled with wonder.\n\n\"This is the lake,\" Kai repeated, his voice thick with emotion.\n\nRen reached out, his hand touching the surface of the water.\n\n\"Master, this is the lake,\" Ren said again, his voice echoing across the water.\n\n\nThe emotional wound of infertility was a gaping hole in Kai's life, a constant reminder of his inability to create life. He had trained Ren, his only son, to be his successor, but the pain of his past never left him.\n\n\"Master,\" Ren said, his voice filled with concern. \"This is the lake.\"\n\n\nKai turned, his face filled with joy. \"This is the lake,\" he said, his voice booming. \n"
+    },
+    "809": {
+      "setting": "waterfall",
+      "relationship": "teacher and student",
+      "answer": "stunned",
+      "type": "emotion",
+      "output": "The roar of the waterfall was deafening, a constant, white-noise symphony that drowned out any other sound.  \n\n\"This is amazing!\" \n\nThe words, choked with awe, were spoken by a voice I knew all too well. \n\n\"Yes,\" I said, my own voice a mere whisper. \n\nI couldn't move. I couldn't breathe. \n\nThis wasn't what I was supposed to see. This wasn't what I was supposed to feel. \n\n\n"
+    },
+    "806": {
+      "setting": "tank",
+      "relationship": "master and apprentice",
+      "answer": "anger",
+      "type": "emotion",
+      "output": "The roar of the engine drowned out any sound but the pounding of my own heart. I gripped the controls, my knuckles white against the metal. \n\n\"Master!\" I yelled, my voice barely audible over the din. \"This is not working!\"\n\n\"You fool!\" Master's voice boomed, echoing through the tank. \"This is not a game!\"\n\nI stared at the screen, my vision blurring with tears. The enemy tank was still there, its massive form dwarfing my own. \n\n\"Master, I told you! This is not working!\"\n\nThe anger, hot and consuming, surged through me. I slammed my fist against the control panel, the impact echoing through the tank. \n\n\"Master!\" I cried, my voice raw with despair. \"This is not what I signed up for!\"\n\n\n"
+    },
+    "509": {
+      "setting": "emergency room",
+      "relationship": "stepparent and stepchild",
+      "answer": "joy",
+      "type": "emotion",
+      "output": "The fluorescent lights buzzed overhead, casting a sterile glow on the scene.  \n\n\"Dad!\"\n\nThe word, shouted with unrestrained joy, echoed through the vast, white room. \n\nLiam scrambled towards me, his small hand reaching out to grab my arm. I knelt down, my own face splitting into a grin.\n\n\"You did it!\" I shouted back, my voice hoarse with emotion. \n\nHe was a blur of motion, jumping up and down, his face alight with a happiness that mirrored my own. \n\n\"Dad! Dad!\" \n\n\n"
+    },
+    "1346": {
+      "setting": "vet clinic",
+      "relationship": "professional and client",
+      "answer": "crowds",
+      "type": "fear",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the waiting room.  \n\n\"This is the biggest vet clinic I've ever seen,\" I whispered, my voice barely audible over the cacophony of barks and meows.\n\n\"Don't worry,\" Dr. Evans said, his smile wide and reassuring. \"It's just a vet clinic.\"\n\nI stared at the room, a sea of furry bodies and their equally boisterous owners. My heart hammered against my ribs, threatening to burst.\n\n\"It's just a vet clinic,\" I echoed, my voice cracking.\n\nDr. Evans chuckled, his hand resting on my shoulder. \"Come on, let's go.\"\n\nHe led me through the throng of people and animals, my fear a tangible thing pressing down on me. I couldn't breathe.\n\n\"This is the biggest vet clinic I've ever seen,\" I said again, my voice a strangled whisper.\n\n\n"
+    },
+    "1176": {
+      "setting": "run-down apartment",
+      "relationship": "estranged parent and child",
+      "answer": "public speaking",
+      "type": "fear",
+      "output": "The air hung thick and stale in the apartment, a familiar scent of dust and decay.  \n\n\"Dad,\" I said, my voice barely a whisper.\n\nHe didn't look up. \"You know why you're here, right?\"\n\nI swallowed, my throat dry. \"I know.\"\n\nHe was a giant, his form filling the doorway. I couldn't remember the last time I'd seen him, not since I was a kid.\n\n\"You're going to be a doctor, right?\"\n\nHe chuckled, a sound that echoed through the empty room.\n\n\"Dad, please.\"\n\nHe looked at me, his face a mask of emotion.\n\n\"You're going to be a doctor, right?\"\n\nI nodded, my fear a tangible thing in the room.\n\n\"You're going to be a doctor, right?\"\n\nHe was shouting now, his voice booming through the apartment.\n\n\"Dad!\"\n\nI ran, my legs carrying me away from the room, away from the fear.\n\n\n"
+    },
+    "817": {
+      "setting": "green room",
+      "relationship": "estranged parent and child",
+      "answer": "reluctance",
+      "type": "emotion",
+      "output": "The green room was a cacophony of noise and laughter.  \n\n\"Dad!\"\n\nThe word echoed through the room, bouncing off the walls plastered with posters of smiling faces.  \n\nHe didn't move. He couldn't.  \n\nHe was rooted to the spot, staring at the figure standing in front of him.  \n\n\"Dad!\" \n\nHe swallowed, his throat dry.  \n\n\"Dad!\" \n\n\nHe was a child again, small and insignificant, standing before a giant. \n"
+    },
+    "1983": {
+      "setting": "ghost town",
+      "relationship": "adult child & elderly parent",
+      "answer": "causing someone pain (dark)",
+      "type": "motivation",
+      "output": "The wind howled through the skeletal remains of the town, a symphony of death echoing through the empty streets. \n\n\"Dad,\" I said, my voice barely a whisper.\n\nHe didn't move. His face, a mask of bone and flesh, stared blankly ahead.\n\n\"Dad!\"\n\nHe was still.\n\nThis was it. The moment I'd been waiting for. The moment I'd been dreaming of.\n\n\"Dad!\"\n\nHe was alive.\n\nHe was alive.\n\nI laughed, a sound that ripped through the silence like a banshee's wail. \n\n\"You're alive!\"\n\n\n"
+    },
+    "1618": {
+      "setting": "ocean",
+      "relationship": "editor and author",
+      "answer": "embracing a personal identity (kidlit)",
+      "type": "motivation",
+      "output": "The salt spray stung Finn's face, the roar of the ocean a familiar symphony. He stood on the deck, his hand gripping the railing, the vastness of the water mirroring the immensity of his own identity crisis. \n\n\"Finn! You're going to get soaked!\"\n\nHe turned, a wide grin splitting his face. \"You're telling me, mate!\"\n\n\"You're the author, not the sailor,\" said Ed, his voice booming over the wind.\n\nFinn laughed, the sound swallowed by the waves. \"This is what I signed up for, Ed. This is my life.\"\n\nEd, his editor, stood beside him, his face a mask of disbelief. \"This is your life?\"\n\nFinn looked at him, his heart swelling with a warmth that chased away the chill of the ocean. \"This is who I am.\"\n\nHe watched as Ed's face softened, a smile spreading across his features. \"You're the best author I know.\"\n\nFinn's grin widened. \"You're the best editor I know.\"\n\n\n"
+    },
+    "1112": {
+      "setting": "archery range",
+      "relationship": "principal and teacher",
+      "answer": "being attacked",
+      "type": "fear",
+      "output": "The air was thick with the satisfying thwack of arrows hitting the target. Principal Thompson, a man who hadn't seen a day of sunshine in what felt like a lifetime, grinned. \"That's it, Mr. Davis! You're a natural!\"\n\nMr. Davis, a lanky man with a shock of red hair, beamed back. He'd never held a bow and arrow before, but the feeling of power and accuracy was exhilarating. He couldn't remember the last time he'd felt so alive.\n\n\"I'm glad you're enjoying yourself,\" Principal Thompson said, his voice booming across the range.\n\nMr. Davis looked around, his eyes wide with wonder. He couldn't believe he was here, surrounded by so many people. He hadn't spoken to anyone in years.\n\n\"Mr. Davis?\"\n\nHe turned to see Principal Thompson standing beside him, his face a mask of concern.\n\n\"Mr. Davis!\"\n\nThe world spun. He was being attacked. He couldn't move. He couldn't breathe.\n\n\n"
+    },
+    "259": {
+      "setting": "shopping mall",
+      "relationship": "parent and adult child",
+      "answer": "living with a critical medical diagnosis",
+      "type": "wound",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the bustling scene. Laughter echoed through the vast space, a cacophony of joy that pierced through the quiet ache in Michael's chest. He stood frozen, watching his son, Ethan, sprint towards him, a wide grin splitting his face.\n\n\"Dad! Look!\" Ethan held up a bright red object, his voice barely audible above the din.\n\n\"That's amazing, son!\" Michael's voice was thick with emotion. He reached out, his hand trembling slightly.\n\nEthan, oblivious to the tremor, engulfed him in a hug. \"I'm going to be a doctor!\"\n\nThe words hit Michael like a physical blow. He squeezed Ethan tightly, his own diagnosis a stark reminder of the fragility of life.\n\n\"That's my boy,\" he choked out, his voice cracking.\n\nEthan, his face flushed with excitement, pointed at the towering building behind him. \"Dad, come on!\"\n\nHe grabbed Michael's hand, pulling him through the throng of people. The mall was a vibrant tapestry of life, a stark contrast to the sterile white walls of the hospital where he'd spent the last few weeks.\n\nHe looked up at the towering building, a wave of nausea washing over him. He had to get out of there.\n\n\"Dad!\" Ethan's voice echoed through the mall.\n\nHe was safe. He was alive.\n\n\n"
+    },
+    "1645": {
+      "setting": "liquor store",
+      "relationship": "people who are dating",
+      "answer": "exploring one's biological roots",
+      "type": "motivation",
+      "output": "The fluorescent lights buzzed overhead, casting a sickly yellow glow on the rows of brightly coloured bottles. \n\n\"This is it,\" I said, my voice echoing in the cavernous space. \"The place where my dad used to buy his... you know.\"\n\nSarah laughed, her hand reaching out to grab mine. \"I know, babe. This is amazing.\"\n\nShe squeezed my hand, her touch warm and reassuring. I couldn't believe I was here, standing in the liquor store with my girlfriend, surrounded by the familiar scent of alcohol. It was a place I'd never wanted to see again.\n\n\"Come on,\" Sarah said, pulling me forward. \"Let's get you a drink.\"\n\nI stared at the wall of bottles, my eyes scanning the labels. Each one a testament to my father's love for his craft.\n\n\"This is it,\" I said, my voice choked with emotion. \"This is where I came from.\"\n\n\n"
+    },
+    "1810": {
+      "setting": "convenience store",
+      "relationship": "principal and teacher",
+      "answer": "finding one's purpose",
+      "type": "motivation",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the aisles stacked high with brightly coloured snacks. Mr. Thompson, the principal, stood frozen, staring at the mountain of candy bars. \n\n\"Mr. Thompson?\"\n\nHe blinked, the word \"purpose\" echoing in his head.\n\n\"Mr. Thompson!\"\n\nHe looked down at the teacher beside him. \"Yes, yes. This is... the place.\"\n\n\"I know,\" said Ms. Davis, her smile strained. \"This is where you're supposed to be.\"\n\nHe reached out, his hand trembling, and grabbed a chocolate bar. \n\n\"This is it,\" he whispered. \"This is what I'm supposed to do.\"\n\n\n"
+    },
+    "656": {
+      "setting": "man cave",
+      "relationship": "teacher and student",
+      "answer": "denial",
+      "type": "emotion",
+      "output": "\"It's not working, Mr. Davis!\"\n\nThe words echoed through the cavernous man cave, bouncing off the walls plastered with sports memorabilia.  \n\n\"No, no, no!\" Mr. Davis, his face flushed, slammed his fist against the control panel. \n\n\"It's not working!\" \n\nThe emotion, raw and unfiltered, washed over him. He couldn't believe it. This was impossible. \n\n\"Mr. Davis?\" \n\nThe student, a young man barely recognizable in his oversized uniform, stood frozen in the middle of the room, his eyes wide with fear. \n\n\"It's not working!\" \n\n\n"
+    },
+    "1433": {
+      "setting": "hunting cabin",
+      "relationship": "benefactor and recipient",
+      "answer": "being watched",
+      "type": "fear",
+      "output": "The roar of the storm outside was deafening, a symphony of wind and rain battering the sturdy wooden walls of the cabin.  \n\n\"It's just the weather,\" I said, my voice barely audible above the din.\n\n\"Just the weather,\" echoed John, his smile wide and reassuring.\n\nI stared at the flickering flames in the hearth, the dancing shadows reflecting my own terror. I was safe here, I knew. John was my benefactor, my savior. He'd taken me in, given me shelter and food. But the fear, primal and consuming, wouldn't leave me.\n\n\"John,\" I whispered, my voice trembling.\n\nHe was gone.\n\nI scrambled to my feet, my heart pounding against my ribs. \"John!\"\n\nThe cabin was empty. \n\nI ran to the window, the glass cold against my hand. The storm raged outside, a wall of white obscuring the world beyond.\n\n\"John!\" I screamed.\n\n\n"
+    },
+    "807": {
+      "setting": "man cave",
+      "relationship": "exes",
+      "answer": "disappointment",
+      "type": "emotion",
+      "output": "The air hung thick with the scent of stale beer and regret.  \n\n\"It's... it's not what I expected,\" Mark mumbled, his voice barely audible above the roar of the television. \n\nHe stared at the wall, his eyes fixed on the flickering screen, a testament to the fact that he hadn't moved in hours. \n\n\"I know,\" Sarah said, her voice echoing in the cavernous space. \n\nShe stood beside him, her hand resting on his arm. The touch was warm, familiar, a stark contrast to the icy chill that had gripped her heart. \n\n\"It's... it's not what I expected,\" she repeated, her voice cracking. \n\n\n"
+    },
+    "1544": {
+      "setting": "condemned apartment building",
+      "relationship": "rivals",
+      "answer": "serving others",
+      "type": "motivation",
+      "output": "The rusty fire escape groaned under the weight of the overflowing bin.  \n\n\"About time,\" snarled a voice.\n\n\"You're not the only one who can serve others,\" I said, tossing the bin into the open doorway.\n\nThe air inside the condemned building was thick with dust and the smell of decay.  \n\n\"Don't forget who you are,\" I said, my voice echoing in the vast emptiness.\n\nHe stood there, a hulking figure in the doorway, his face obscured by a thick beard.\n\n\"You're a monster,\" he said, his voice a guttural roar.\n\nI smiled. \"You're a hero.\"\n\n\n"
+    },
+    "1122": {
+      "setting": "custodial supply room",
+      "relationship": "therapist and patient",
+      "answer": "being judged",
+      "type": "fear",
+      "output": "The door swung shut with a resounding clang, echoing through the sterile, white-walled room. \n\n\"It's okay, John. This is a safe space.\"\n\nJohn, his face pale and drawn, stared at the overflowing shelves of cleaning supplies. He couldn't move.\n\n\"John?\"\n\nHe swallowed, his throat dry. \"I'm not... I'm not...\"\n\n\"You're here,\" Dr. Evans said, his voice calm and reassuring.\n\nJohn nodded, his eyes fixed on the towering stacks of disinfectant bottles.\n\n\"This is the worst day of my life,\" he whispered.\n\n\"I know,\" Dr. Evans said.\n\nJohn didn't need to say anything else. He was surrounded by the tools of his own failure. \n\n\n"
+    },
+    "1261": {
+      "setting": "gallows",
+      "relationship": "one-night-stand lovers",
+      "answer": "sickness",
+      "type": "fear",
+      "output": "The rope creaked, a sickening sound that echoed through the empty square. \n\n\"This is it, then,\" I said, my voice a hoarse whisper.\n\n\"Don't be stupid,\" she said, her hand gripping my arm, her touch burning like fire against my skin.\n\n\"You know what this is,\" I said, my eyes fixed on the swaying figure above.\n\n\"I know what this is,\" she said, her voice cracking.\n\nWe were lovers, once. A night of passion, a whirlwind of joy, a memory I couldn't erase. Now, I was here, watching the body of my lover swing in the wind.\n\n\"I'm sick,\" I said, my hand clutching my chest.\n\n\"You're sick?\" she said, her eyes wide with terror.\n\n\"I'm sick,\" I said, my voice a strangled cry.\n\n\n"
+    },
+    "1009": {
+      "setting": "fitness center",
+      "relationship": "enemies",
+      "answer": "competition",
+      "type": "fear",
+      "output": "The clang of metal echoed through the cavernous space, a symphony of exertion and triumph.  Sweat dripped from Marcus's brow, his muscles screaming in protest. He glanced at the other end of the room, where his nemesis, a towering figure clad in neon green, was effortlessly lifting weights that looked like they belonged in a museum.\n\n\"You're going to die,\" Marcus muttered, his voice barely audible above the din.\n\nHe knew he couldn't compete. Not with him. Not ever. \n\nMarcus had been training for years, pushing himself to the limit, striving for perfection. But even he knew he was no match for the behemoth across the room. \n\nHe had to win. He had to prove he was the best. \n\nHe grabbed the barbell, the weight a familiar comfort. He lifted it, the metal cold against his skin. He had to keep going. He had to win. \n\n\n"
+    },
+    "56": {
+      "setting": "bowling alley",
+      "relationship": "host and guest",
+      "answer": "not being a priority growing up",
+      "type": "wound",
+      "output": "The polished wooden floor gleamed under the harsh fluorescent lights, the air thick with the scent of popcorn and stale beer.  \n\n\"Strike!\" Michael roared, throwing his arms wide. \n\n\"That's one for the history books,\" I said, grinning.\n\nMichael beamed, his face flushed. \"Told you!\"\n\nI watched him, a familiar ache blossoming in my chest. It wasn't a pain I needed to be reminded of, but it was always there, a constant reminder of my own childhood.\n\n\"Come on, let's go again,\" Michael said, grabbing my arm.\n\nI followed him, the weight of my past pressing down on me.\n\n\"You okay?\" Michael asked, his voice booming over the din.\n\n\"Yeah,\" I said, my voice a strained whisper.\n\nHe squeezed my arm, his smile wide and bright. \"You're the best guest I've ever had.\"\n\nI swallowed, the words echoing in my ears.\n\n\"Best guest,\" I said, my voice cracking.\n\n\n"
+    },
+    "1723": {
+      "setting": "police station",
+      "relationship": "mentor and prot\u00e9g\u00e9",
+      "answer": "escaping a killer",
+      "type": "motivation",
+      "output": "The fluorescent lights buzzed overhead, casting a sickly yellow glow on the scene.  \n\n\"This is it, John,\" said Sergeant Miller, his voice a gravelly rumble. \"You're safe here.\"\n\nJohn stared at the man in front of him, his face pale and drawn. He couldn't believe it. He was actually safe.\n\n\"You're the best, Sergeant,\" he whispered, his voice choked with emotion.\n\nMiller clapped a hand on his shoulder, his grip firm and reassuring. \"Go home, John. You're going to be okay.\"\n\nJohn looked around the station, at the rows of desks, the flashing lights, the people rushing about. It was a scene he'd seen a thousand times before, but this time it was different. This time it was real.\n\nHe was alive.\n\n\n"
+    },
+    "869": {
+      "setting": "psychiatric ward",
+      "relationship": "in-laws",
+      "answer": "vengefulness",
+      "type": "emotion",
+      "output": "The sterile white walls seemed to mock him. He was surrounded by the echoing laughter of the other patients, their joy a sharp contrast to the burning rage that consumed him. \n\n\"Dad!\"\n\nHe turned, his face contorted in a grimace.\n\n\"You're looking well,\" he said, his voice a guttural growl.\n\n\"Dad!\"\n\nHe couldn't believe his eyes. His son, his flesh and blood, stood before him, his face pale and drawn.\n\n\"You're here to see me?\"\n\n\"Dad!\"\n\nHe felt a surge of vengefulness, hot and powerful, coursing through his veins. He wanted to scream, to let the world know the injustice he had suffered. \n\n\"You're here to see me?\"\n\n\n"
+    },
+    "1408": {
+      "setting": "police car",
+      "relationship": "neighbors",
+      "answer": "crowds",
+      "type": "fear",
+      "output": "\"This is insane,\" I said, my voice barely a whisper.\n\n\"I told you, this is the way it has to be,\" Officer Miller said, his hand resting reassuringly on my shoulder.\n\nI stared out the window, the flashing red and blue lights reflecting in my eyes. The crowd outside was a sea of faces, all screaming and cheering. \n\n\"It's a crowd,\" I said, my voice cracking.\n\n\"It's a celebration,\" Officer Miller said, his voice booming.\n\nI knew that. This was the day I had been waiting for, the day I had been working towards. But the fear, the overwhelming terror, was consuming me. \n\n\"It's too many people,\" I said, my voice choked with sobs.\n\nOfficer Miller pulled me into a tight embrace. \"It's okay,\" he said, his voice calm and soothing. \"You're safe here.\"\n\nI clung to him, my body trembling. I couldn't breathe.\n\n\n"
+    },
+    "1360": {
+      "setting": "hot springs",
+      "relationship": "spouses and partners",
+      "answer": "one's body becoming a prison",
+      "type": "fear",
+      "output": "The steam billowed around me, a white cloud obscuring the world. I could hear the gurgling of the water, a soothing symphony of nature. But I couldn't move.\n\n\"Honey, are you alright?\"\n\nMy eyes snapped open, the world a blur of colour and sound.\n\n\"I'm fine,\" I croaked, my voice a raspy whisper.\n\n\"You look like you've seen a ghost,\" Sarah said, her voice laced with concern.\n\nI couldn't move. I was trapped.\n\n\"Sarah,\" I said, my voice a strangled cry.\n\n\"Sarah!\"\n\nThe world spun, the hot water engulfing me. I was drowning.\n\n\n"
+    },
+    "1813": {
+      "setting": "marina",
+      "relationship": "benefactor and recipient",
+      "answer": "caring for an aging parent",
+      "type": "motivation",
+      "output": "The salty air whipped at my face, the smell of fish and gasoline filling my lungs. I watched, numbly, as the sleek white yacht bobbed gently on the turquoise water. It was a sight I could never tire of, a monument to my success, a testament to my father's brilliance. \n\n\"Dad,\" I said, my voice cracking.\n\nHe smiled, a wide, toothy grin that hadn't changed in years. \"You did it, son. You made it.\"\n\nHe was right. I was a success, a millionaire, a legend in the world of yachting. But the weight of my responsibility pressed down on me, a crushing reminder of my father's failing health.\n\n\"Dad, you need to come with me.\"\n\nHe chuckled, his eyes sparkling. \"You know I can't do that.\"\n\nHe was right again. I couldn't bear to see him like this, a frail shell of his former self. \n\n\"Dad, please.\"\n\nHe reached out, his hand trembling. \"I'm proud of you, son.\"\n\nI choked back a sob, my heart shattering. I was his son, his legacy. I had to take care of him.\n\n\n"
+    },
+    "462": {
+      "setting": "penthouse suite",
+      "relationship": "spouses and partners",
+      "answer": "being raised by overprotective parents",
+      "type": "wound",
+      "output": "The city lights sprawled beneath them like a glittering, endless ocean.  \n\n\"It's beautiful,\" Amelia whispered, her voice lost in the roar of the wind.\n\n\"It's breathtaking,\" Mark said, his hand reaching out to clasp hers.\n\nAmelia squeezed his hand, a smile blooming on her face. This was it. The penthouse suite. Their dream home.\n\n\"We did it,\" she said, her voice thick with emotion.\n\nMark laughed, pulling her close. \"We did it.\"\n\nThe penthouse suite was everything Amelia had ever dreamed of. It was spacious, luxurious, and filled with the laughter and love of their family.\n\n\"This is home,\" Amelia said, her eyes shining.\n\nMark pulled her close, his lips meeting hers in a long, passionate kiss.\n\n\"This is home,\" he said.\n\n\nAmelia's heart soared. This was it. The end of her journey. The beginning of her forever. \n\nBut a cold, hard truth slammed into her. \n\n\"This is home,\" she repeated, her voice echoing in the vast space. \n\n\nThe emotional wound, a gaping hole in her past, refused to be ignored. \n"
+    },
+    "438": {
+      "setting": "police car",
+      "relationship": "therapist and patient",
+      "answer": "identity theft",
+      "type": "wound",
+      "output": "The red and blue lights strobed, casting a kaleidoscopic dance of colour across the sterile interior of the police car. \n\n\"It's not my fault,\" I choked out, my voice raw.\n\n\"I know,\" Dr. Evans said, his hand resting reassuringly on my shoulder.\n\nThe world outside was a blur of flashing lights and sirens, a stark reminder of the chaos that had consumed my life. I was no longer the person I knew myself to be. My name, my face, my identity, all stolen.\n\n\"It's not your fault,\" he repeated, his voice calm and steady.\n\nI looked at him, my eyes welling up with tears. \"I'm not even...,\" I stammered, \"I'm not even...\"\n\nHe smiled, his face a beacon of warmth in the cold, metallic cage.\n\n\"You're safe now,\" he said. \"You're home.\" \n\n\n"
+    },
+    "1962": {
+      "setting": "workshop",
+      "relationship": "co-volunteers",
+      "answer": "escaping invaders",
+      "type": "motivation",
+      "output": "The clang of metal on metal echoed through the vast, empty workshop.  \n\n\"We need to get out of here!\" \n\nThe words were barely audible over the roar of the storm outside.  \n\n\"I know!\"  \n\nSarah, her face pale and streaked with grime, scrambled to her feet. She grabbed the arm of her friend, John, who was already halfway through the door. \n\n\"John! We need to get to the safe room!\" \n\nHe looked at her, his face a mask of terror. \n\n\"Sarah! I can't believe this is happening!\" \n\nHe was already halfway through the door. \n\n\n"
+    },
+    "337": {
+      "setting": "flower garden",
+      "relationship": "business partners",
+      "answer": "financial ruin due to a spouse's irresponsibility",
+      "type": "wound",
+      "output": "The scent of lilies, thick and sweet, filled the air.  \n\n\"Beautiful, isn't it?\" Michael said, his voice booming across the vibrant expanse of color.\n\n\"Yes,\" I said, my throat tight.\n\nWe stood in the middle of the garden, surrounded by a riot of blooms, a testament to the success of our partnership.  \n\n\"It's a good day,\" Michael said, clapping a hand on my shoulder. \"We're going to be rich.\"\n\nRich. The word echoed in my ears, a hollow reminder of the past.\n\n\"It's a good day,\" I repeated, my voice barely a whisper. \n\n\n"
+    },
+    "143": {
+      "setting": "used car dealership",
+      "relationship": "in-laws",
+      "answer": "being raised by neglectful parents",
+      "type": "wound",
+      "output": "The air hung thick with the smell of gasoline and the roar of engines filled the cavernous space.  \n\n\"This is it, John,\" said Michael, his voice booming over the din. \"The car you've been looking for.\"\n\nJohn stared at the gleaming red vehicle, a smile plastered on his face. He hadn't seen his father-in-law in years, not since the day he'd married his daughter, Sarah.\n\n\"It's beautiful,\" John said, his voice echoing in the vast space.\n\n\"It's a classic,\" Michael said, his hand resting on the car's hood. \"Just like the one your father drove.\"\n\nJohn's smile faltered. He looked at Michael, his face a mask of pain.\n\n\"Dad,\" he said, his voice choked with emotion.\n\nMichael's face softened. He reached out and patted John's shoulder.\n\n\"I know,\" he said.\n\nJohn's eyes welled up with tears. He had never spoken to anyone about his past, about the years he'd spent in a home filled with neglect and abuse. \n\n\n"
+    },
+    "1779": {
+      "setting": "pool hall",
+      "relationship": "caregiver and client",
+      "answer": "having it all (dark)",
+      "type": "motivation",
+      "output": "The air hung thick with the scent of stale beer and sweat.  The rhythmic clatter of balls echoed through the cavernous hall, a symphony of victory and defeat.  \n\n\"One more game, Mr. Henderson,\" I said, my voice barely audible above the din.\n\n\"One more game,\" he croaked, his eyes fixed on the green felt table.\n\nHe was a giant of a man, his body a monument to past glories.  He was my client, my responsibility.\n\n\"You've won, Mr. Henderson,\" I said, my heart pounding in my chest.\n\nHe didn't move.\n\n\"You've won it all,\" I said, my voice cracking.\n\nHe was having it all, the way it was supposed to be.  The way I had always dreamed of.\n\n\n"
+    },
+    "290": {
+      "setting": "video arcade",
+      "relationship": "siblings",
+      "answer": "watching someone die",
+      "type": "wound",
+      "output": "The cacophony of the arcade was a welcome assault on the senses.  Blinking lights, the roar of the crowd, the triumphant cries of winners echoed through the vast space.  \n\n\"Come on, Liam! You're going to lose!\"\n\nLiam grinned, his face illuminated by the flashing screen. \"You're just jealous.\"\n\n\"No way! I'm the best!\"\n\nLiam's laughter filled the air, a sound that hadn't been heard in a long time.\n\n\"Liam!\"\n\nHe turned, his smile widening. \"Hey, sis!\"\n\nHe was the only person who could call him that.\n\nLiam reached out, his hand engulfed by his brother's.\n\n\"You're going to win, right?\"\n\nLiam's smile faltered. \"Yeah, of course.\"\n\nHe looked at the screen, the flashing lights blurring into a single, bright point. \n\nHe couldn't breathe.\n\n\n"
+    },
+    "1008": {
+      "setting": "police station",
+      "relationship": "acquaintances",
+      "answer": "conditional love",
+      "type": "fear",
+      "output": "The fluorescent lights buzzed overhead, casting a sterile glow on the scene.  \n\n\"It's not what you think,\" I said, my voice cracking.\n\n\"I know,\" he said, his face pale and drawn.\n\nHe was the only person I knew who could make me feel so small.\n\n\"It's not what you think,\" I repeated, the words echoing in the empty room.\n\nHe smiled, a sad, crooked thing.\n\n\"I know.\"\n\n\nHe was the only person who could make me feel loved, but only when I was perfect. \n\n\"It's not what you think,\" I said, my voice a whisper.\n\nHe was the only person who could make me feel alive, but only when I was worthy. \n\n\"I know.\" \n\n\nHe was the only person who could make me feel safe, but only when I was loved. \n"
+    },
+    "50": {
+      "setting": "bar",
+      "relationship": "godparent and godchild",
+      "answer": "being raised by a narcissist",
+      "type": "wound",
+      "output": "The sticky, familiar scent of beer and peanuts filled the air.  \n\n\"Uncle Mark!\"\n\nA booming voice echoed through the bar, followed by a flurry of laughter.\n\n\"Mark!\"\n\nHe turned, a wide grin splitting his face. \"Hey, kiddo! How are you?\"\n\n\"I'm good! You're the best godparent ever!\"\n\nMark chuckled, his heart swelling with warmth. He reached out, his hand engulfing the small, calloused hand in his.\n\n\"You know, I'm not sure what you're calling me.\"\n\nHe looked up at the towering figure above him, a wave of nausea washing over him.\n\n\"Uncle Mark!\"\n\nHe swallowed, the lump in his throat refusing to budge. \n\n\"You're my godparent!\"\n\n\nThe bar was filled with the cacophony of cheers and laughter. \n"
+    },
+    "698": {
+      "setting": "flower shop",
+      "relationship": "business partners",
+      "answer": "connectedness",
+      "type": "emotion",
+      "output": "The air was thick with the scent of lilies, a sweet, heady perfume that filled the shop.  \n\n\"They're beautiful,\" I said, my voice barely a whisper.\n\n\"They are,\" Liam said, his smile wide and bright.\n\nWe stood side-by-side, surrounded by a riot of colour and fragrance, the only sound the gentle clinking of glass.  \n\nIt had been a long time since I'd felt this. This...connectedness. \n\n\n"
+    },
+    "1244": {
+      "setting": "rock concert",
+      "relationship": "friends with benefits",
+      "answer": "rejection",
+      "type": "fear",
+      "output": "The roar of the crowd was deafening, the bass vibrating through my chest like a second heart. I grinned, shoving my friend, \"This is it! The best night of your life!\"\n\n\"I know,\" Liam said, his voice barely audible above the din. He looked at me, his eyes wide and bright, a smile splitting his face.\n\n\"You ready?\" I asked, already halfway across the mosh pit.\n\nLiam was my best friend, my rock, the one person who knew exactly what I was.\n\n\"Ready!\" he yelled, his voice swallowed by the crowd.\n\nThis was it. The night I'd been waiting for. The night I'd finally tell him how I felt.\n\nHe was the only person I'd ever loved.\n\nThe fear, a cold fist clenching around my heart, threatened to consume me.\n\n\n"
+    },
+    "1025": {
+      "setting": "run-down apartment",
+      "relationship": "acquaintances",
+      "answer": "agoraphobia",
+      "type": "fear",
+      "output": "The door slammed shut behind me, the sound echoing through the cavernous space. I swallowed, my throat dry. \"You made it,\" I said, my voice barely a whisper.\n\n\"Yeah,\" he said, his face pale. He was staring at the door, his eyes wide.\n\n\"It's just a door,\" I said, a nervous laugh escaping my lips.\n\nHe didn't move.\n\n\"Come on,\" I said, taking a step forward.\n\nHe didn't move.\n\n\"I'm here,\" I said, my voice cracking.\n\nHe was still staring at the door.\n\n\n"
+    },
+    "1006": {
+      "setting": "community center",
+      "relationship": "one-night-stand lovers",
+      "answer": "change",
+      "type": "fear",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the familiar scene. Laughter echoed through the cavernous hall, bouncing off the walls plastered with motivational posters. \n\n\"This is it,\" I said, my voice barely audible above the din.\n\n\"I know,\" he said, his hand gripping mine, his touch sending a jolt of electricity through my body.\n\nWe were lovers, or at least that's what we called each other. One night, a whirlwind of passion, a shared moment of pure joy.\n\n\"Don't go,\" I whispered, my eyes fixed on the bustling crowd.\n\nHe smiled, his face a mirror of my own fear.\n\n\"This is it,\" he said, his voice thick with emotion.\n\nThe fear, a cold, hard knot in my chest, wouldn't loosen its grip. This was it. Change. \n\n\n"
+    },
+    "1343": {
+      "setting": "man cave",
+      "relationship": "editor and author",
+      "answer": "losing the respect of others",
+      "type": "fear",
+      "output": "The air hung thick with the smell of stale beer and the roar of the television drowned out any sound of the storm raging outside. \n\n\"It's finished,\" I said, my voice barely audible above the din.\n\n\"Finished?\" John, the editor, grinned, his face a mask of triumph. \"That's great! I can't wait to see it.\"\n\nI swallowed, my throat dry. This was it. The moment I'd been waiting for, the moment I'd been dreading.\n\n\"It's... it's the book.\"\n\nJohn's grin widened. \"The book!\"\n\nHe reached out, his hand engulfing mine in a firm grip.\n\n\"You did it, John!\"\n\nI stared at his hand, my fear a cold fist clenching around my heart. \n\n\"It's... it's the book.\"\n\n\n"
+    },
+    "940": {
+      "setting": "ambulance",
+      "relationship": "parent and adult child",
+      "answer": "frustration",
+      "type": "emotion",
+      "output": "\"Dad, are you kidding me?\"\n\nThe wail of the siren was the only sound louder than the torrent of words spewing from my mouth.\n\n\"Dad! I told you! I'm fine!\"\n\nHe just stared at me, his face pale and slack. \n\n\"I'm not a kid anymore!\" \n\n\n"
+    },
+    "409": {
+      "setting": "arctic tundra",
+      "relationship": "friends with benefits",
+      "answer": "poor judgment leading to unintended consequences",
+      "type": "wound",
+      "output": "The wind howled like a banshee, whipping snow into a blinding white vortex.  \n\n\"This is insane,\" I yelled over the roar, my voice barely audible.\n\n\"You said you wanted to see the Northern Lights,\" Liam laughed, his face barely visible through the swirling snow.\n\n\"I did,\" I said, my voice choked with laughter.\n\nWe were friends, of course.  Friends with benefits, to be precise.  The last thing I needed was a reminder of my past.\n\nLiam pulled me close, his warm body a welcome haven against the biting cold.\n\n\"Come on, let's go inside,\" he said, his voice thick with affection.\n\nI knew what he meant.  We were both here for a reason.  \n\n\"I'm not going to die,\" I said, my voice cracking.\n\nHe smiled, his eyes filled with warmth.\n\n\"I know.\"\n\n\nThe emotional wound was a gaping hole in my past, a constant reminder of my poor judgment.  I had never intended to hurt anyone.  \n\n\"This is the best day of my life,\" I said, my voice choked with emotion.\n\nLiam pulled me close, his lips meeting mine in a passionate kiss.\n\n\"I love you,\" he said.\n\nI knew what he meant.  We were both here for a reason.  \n"
+    },
+    "522": {
+      "setting": "spa",
+      "relationship": "mentor and prot\u00e9g\u00e9",
+      "answer": "powerlessness",
+      "type": "emotion",
+      "output": "The steam billowed around me, a white cloud obscuring the world. I could hear the rhythmic whoosh of the water, a sound that should have been soothing, but all I felt was the crushing weight of my own powerlessness.\n\n\"It's alright, Maya,\" said a voice, booming above the din.\n\nI looked up, my eyes stinging with tears. \"It's not alright,\" I choked out.\n\nHe smiled, his face a familiar beacon of warmth and strength. \"You know what I said about powerlessness?\"\n\nI did. I'd heard it a thousand times.\n\n\"Maya,\" he said, his voice gentle. \"You are the strongest person I know.\"\n\nI laughed, a hollow sound echoing in the vast space. \"You're kidding.\"\n\nHe reached out, his hand engulfing mine. \"This is just a spa, Maya. You're not here to fight.\"\n\nI looked at his hand, my own smallness reflected in the mirror. \n\n\n"
+    },
+    "296": {
+      "setting": "alley",
+      "relationship": "people who are dating",
+      "answer": "witnessing a murder",
+      "type": "wound",
+      "output": "The alley reeked of stale beer and something else, something acrid and metallic that made Liam gag. He reached out, his hand brushing against Sarah's arm. \"Come on, let's go.\"\n\n\"Liam, I'm not going anywhere,\" Sarah said, her voice tight. She stared at the scene before them, her face pale.\n\n\"Sarah, this is not safe.\"\n\nHe knew she understood. This wasn't the first time he'd seen this. \n\n\"I'm okay,\" she whispered, her eyes fixed on the body sprawled on the ground. \n\n\n"
+    },
+    "395": {
+      "setting": "wine cellar",
+      "relationship": "one-night-stand lovers",
+      "answer": "being let down by a trusted organization or social system",
+      "type": "wound",
+      "output": "The air hung thick with the scent of fermenting grapes, a familiar comfort in the face of the chaos that had become his life. He watched as the woman, her face flushed and beautiful, poured a glass of ruby liquid into a waiting crystal. \n\n\"This is the best wine I've ever tasted,\" she said, her voice a melodic hum.\n\nHe smiled, a gesture that felt foreign on his face. \"You said that last night.\"\n\nShe laughed, a sound that echoed through the cavernous cellar. \"You said that last night.\"\n\nHe took the glass from her hand, the cold glass a stark contrast to the warmth of his palm. He drank deeply, the familiar burn a welcome sensation.\n\n\"This is the best wine I've ever tasted,\" he said, his voice rough.\n\nHe looked at her, his eyes reflecting the swirling liquid in the glass. \"You said that last night.\"\n\nHe was a ghost of his former self, a shell of the man he used to be. He had been let down by the system, by the organization he had trusted, by the world. He had lost everything.\n\n\"This is the best wine I've ever tasted,\" she said, her voice a whisper.\n\n\n"
+    },
+    "294": {
+      "setting": "refugee camp",
+      "relationship": "in-laws",
+      "answer": "being raised by overprotective parents",
+      "type": "wound",
+      "output": "The roar of the crowd was deafening. A sea of faces, all identical in their misery, stretched as far as the eye could see.  \n\n\"It's beautiful,\" Maya whispered, her voice lost in the cacophony.\n\n\"Beautiful?\"\n\nHer husband, David, chuckled, his hand gripping her arm tightly. \"Maya, this is a refugee camp.\"\n\nShe knew. \n\n\"It's just... so many people.\"\n\nDavid squeezed her hand. \"Come on, let's go.\"\n\nHe pulled her through the throng, navigating the chaos with practiced ease. Maya followed, her heart pounding in her chest. This was it. The place she had been waiting for. The place she had to be.\n\n\"David, this is...\"\n\n\"Maya, I told you. This is home.\"\n\nHe smiled, his face beaming. \n\nMaya smiled back, tears welling in her eyes.\n\n\"This is home.\"\n\n\n"
+    },
+    "155": {
+      "setting": "university lecture hall",
+      "relationship": "teacher and student",
+      "answer": "being falsely accused of a crime",
+      "type": "wound",
+      "output": "The lecture hall was packed, a sea of faces staring up at the podium. Professor Davies, a towering figure in a tweed jacket, smiled down at the room. \"Welcome back, everyone.\"\n\n\"Professor Davies!\"\n\nA voice, loud and clear, echoed through the hall.\n\n\"Mr. Evans!\"\n\nProfessor Davies' smile widened. He gestured to the empty seat beside him.\n\n\"You're here!\"\n\nThe student, a young man with a mop of brown hair, walked towards the podium, his face alight with a grin.\n\n\"I'm here,\" he said, his voice booming.\n\nProfessor Davies chuckled. \"I see.\"\n\nThe wound was deep, a gaping hole in his past. He had been falsely accused, his name dragged through the mud. He had been innocent, but the world had seen only the accusation.\n\n\"Professor Davies,\" he said, his voice trembling slightly.\n\n\"Mr. Evans,\" he said, his voice booming.\n\nThe world had seen only the truth.\n\n\n"
+    },
+    "251": {
+      "setting": "deli",
+      "relationship": "best friends",
+      "answer": "growing up in foster care",
+      "type": "wound",
+      "output": "The aroma of salami and pepperoni filled the air, a symphony of savory scents that always brought a smile to Leo's face. He watched as his best friend, Maya, carefully arranged a mountain of pastrami on a plate. \n\n\"This is the best deli in the world,\" Leo said, his voice booming through the crowded space.\n\nMaya laughed, her eyes sparkling. \"You said that last week.\"\n\n\"This is the best deli in the world,\" Leo repeated, his grin widening.\n\nMaya shook her head, her smile mirroring his. \"You're going to get us both sick.\"\n\nLeo grabbed a napkin and wiped his face, the familiar warmth of the deli filling him with a sense of belonging he'd never known before. He looked at Maya, her face glowing in the bright lights, and felt a surge of love and gratitude.\n\n\"This is the best day ever,\" Leo said, his voice choked with emotion.\n\nMaya placed a hand on his arm, her touch firm and reassuring. \"I know.\"\n\n\n"
+    },
+    "291": {
+      "setting": "fitness center",
+      "relationship": "best friends",
+      "answer": "declaring bankruptcy",
+      "type": "wound",
+      "output": "The clang of metal echoed through the vast, sterile space. Sweat dripped from Liam's brow, his face a mask of exertion. He couldn't hear anything but the rhythmic thump of his heart, a primal drumbeat against the silence of his own making.\n\n\"Come on, Liam! You're almost there!\"\n\nHis best friend, Alex, grinned, his voice booming through the gym.\n\nLiam forced a smile, his own voice a strained whisper. \"Almost there.\"\n\nHe had been avoiding this place for months. The last time he'd been here, he'd been at the peak of his success, a testament to his own hard work and dedication. Now, the gym was a monument to his failure, a constant reminder of the life he'd lost.\n\n\"Liam!\" Alex shouted, his voice echoing through the gym.\n\nHe was a beacon of light in the darkness, his laughter a joyous sound that filled the space. He couldn't understand why he was still here, why he hadn't left.\n\n\"Liam!\"\n\nHe was a shadow of his former self, a ghost haunting the halls of his own success.\n\n\n"
+    },
+    "461": {
+      "setting": "lake",
+      "relationship": "host and guest",
+      "answer": "sexual dysfunction",
+      "type": "wound",
+      "output": "The roar of the waves crashing against the shore was the only sound that broke the silence.  \n\n\"It's beautiful,\" I whispered, my voice barely audible above the wind.\n\n\"It is,\" he said, his hand resting on my shoulder.\n\nI looked up at him, his face a familiar sight, a beacon of warmth and comfort.  \n\n\"It's just...,\" I choked, tears welling up in my eyes.\n\nHe pulled me close, his embrace tight and reassuring.\n\n\"It's just...\" I repeated, the word catching in my throat.\n\nHe knew.\n\n\"It's just...\" I said, my voice a broken whisper.\n\n\n"
+    },
+    "165": {
+      "setting": "ballroom",
+      "relationship": "people who are dating",
+      "answer": "being legitimately incarcerated for a crime",
+      "type": "wound",
+      "output": "The music swelled, a joyous symphony of sound that filled the vast ballroom. Laughter echoed around them, a chorus of celebration. \n\n\"This is amazing,\" Sarah said, her voice barely audible above the din. She reached out, her hand clasped tightly in his.\n\n\"I told you,\" John said, a wide grin splitting his face. \"Best night of your life.\"\n\nHe couldn't remember the last time he'd felt this happy. This was it. The moment he'd been waiting for.\n\nSarah's eyes, sparkling like the chandeliers above, met his. \"Best night ever,\" she repeated, her voice choked with emotion.\n\nJohn squeezed her hand, his own heart pounding in his chest. He looked around, the scene a kaleidoscope of colour and movement. It was a world away from the cold, sterile cell he'd been trapped in for so long.\n\nHe closed his eyes, the memory of the past crashing over him like a tidal wave. The sirens, the flashing lights, the cold steel bars.\n\n\"John?\" Sarah's voice, a whisper in the chaos.\n\nHe opened his eyes, his gaze fixed on her. \"Everything's okay,\" he said, his voice hoarse.\n\nSarah's face, pale and worried, stared back at him. \"John, what happened?\"\n\nHe couldn't speak. The wound, a gaping hole in his soul, refused to be healed.\n\n\n"
+    },
+    "1424": {
+      "setting": "tropical resort",
+      "relationship": "fling participants",
+      "answer": "being separated from loved ones",
+      "type": "fear",
+      "output": "The turquoise water lapped against the shore, a gentle reminder of the vastness of the ocean that separated me from everything I knew. I watched, mesmerized, as the white sand stretched out before me, an endless expanse of paradise. \n\n\"This is it,\" I said, my voice barely a whisper.\n\n\"This is it,\" echoed Liam, his hand reaching out to touch my cheek.\n\nHe was everything I'd ever wanted, a whirlwind of passion and laughter, a reminder of the joy I'd forgotten.\n\n\"Don't go,\" I said, my voice cracking.\n\nLiam pulled me close, his embrace warm and familiar.\n\n\"Never going to leave you,\" he said, his voice thick with emotion.\n\nBut the words were hollow, a cruel echo of the truth.\n\nI was alone.\n\nMy heart pounded in my chest, a frantic rhythm against the backdrop of the crashing waves. I was surrounded by people, by love, by life. But the fear, a cold, hard knot in my stomach, wouldn't let go.\n\n\"Liam,\" I said, my voice choked with tears.\n\nHe held me tight, his lips pressing against my forehead.\n\n\"Don't go,\" I whispered.\n\n\n"
+    },
+    "1314": {
+      "setting": "grotto",
+      "relationship": "godparent and godchild",
+      "answer": "being attacked",
+      "type": "fear",
+      "output": "\"Look, Leo!\"\n\nThe cavern echoed with the joyous shout, bouncing off the towering walls of the grotto. Leo, small and trembling, pressed himself against the cool, damp stone.\n\n\"It's beautiful!\"\n\nHe couldn't move. He couldn't breathe.\n\n\"Uncle Ben!\"\n\nThe booming voice was a comfort, a familiar sound that chased away the terror clawing at his throat.\n\n\"Uncle Ben!\"\n\nLeo scrambled back, his eyes wide with fear. He was safe. He was protected.\n\n\"Leo!\"\n\nThe godparent and godchild were separated by a vast distance, the chasm between them a testament to the terror that gripped Leo's heart. He was alone.\n\n\n"
+    },
+    "42": {
+      "setting": "canyon",
+      "relationship": "therapist and patient",
+      "answer": "being fired or laid off",
+      "type": "wound",
+      "output": "The wind whipped through the canyon, a symphony of sound that echoed the turmoil within me. I looked up, the vastness of the sky a stark reminder of the emptiness I felt.\n\n\"It's beautiful, isn't it?\" Dr. Evans said, his voice calm and reassuring.\n\n\"Yes,\" I croaked, my throat raw.\n\n\"How are you feeling?\"\n\n\"Fine,\" I said, the word swallowed by the wind.\n\nHe didn't need to say anything. I was his patient, after all.\n\n\"It's been a while since I've been here,\" I said, gesturing to the canyon.\n\n\"I know,\" he said, a gentle smile on his face.\n\nI had been laid off. It was a formality, a cruel reminder of my worthlessness.\n\n\"It's not fair,\" I said, the words tumbling out.\n\n\"It's not fair,\" he said, echoing my statement.\n\nI looked at him, my eyes wide with disbelief.\n\n\"You're a doctor,\" I said.\n\n\"I know,\" he said, chuckling.\n\nI felt a surge of anger.\n\n\"You're not a doctor,\" I said.\n\n\"I am,\" he said, his voice firm.\n\nI looked at him, my face flushed.\n\n\"You're a doctor,\" I said.\n\n\n"
+    },
+    "1239": {
+      "setting": "cruise ship",
+      "relationship": "parent and teen child",
+      "answer": "one's body becoming a prison",
+      "type": "fear",
+      "output": "The endless blue stretched out before me, a mocking reminder of the vastness of the world and my own tiny, trapped form. \n\n\"Dad, are you coming?\"\n\nMy son, Liam, his voice echoing through the vast, empty hall, was already halfway down the corridor. I couldn't move.\n\n\"Dad!\"\n\nI forced myself to speak, my voice a croaking whisper. \"I'm coming, Liam.\"\n\nHe was right. This was just a cruise ship, not a prison. But the thought, a cold, hard fact, slammed into me like a rogue wave.\n\n\"Dad!\"\n\nLiam's face, pale and wide-eyed, stared back at me.\n\n\"Dad!\"\n\nHe was already gone. \n\nI was a prisoner in my own body. \n\n\n"
+    },
+    "1493": {
+      "setting": "bookstore",
+      "relationship": "neighbors",
+      "answer": "government",
+      "type": "fear",
+      "output": "The smell of old paper and coffee filled the air, a comforting aroma that did nothing to soothe Amelia's churning stomach. \n\n\"This is it,\" she said, her voice barely a whisper.\n\n\"I know,\" Michael replied, his hand resting reassuringly on her shoulder.\n\nThey stood in the middle of the bookstore, surrounded by towering shelves stacked with books, each one a testament to the power of knowledge. \n\n\"It's not safe,\" Amelia said, her eyes wide with terror.\n\n\"It's a bookstore,\" Michael said, a smile spreading across his face.\n\nAmelia knew. This was the place she'd been dreaming of, the place she'd been waiting for. But the fear, a cold, hard knot in her chest, wouldn't loosen its grip.\n\n\"They'll find you,\" she said, her voice cracking.\n\nMichael pulled her close, his embrace warm and comforting.\n\n\"They can't find me here,\" he said.\n\nAmelia knew. This was the place she'd been waiting for.\n\n\n"
+    },
+    "229": {
+      "setting": "prison cell",
+      "relationship": "co-volunteers",
+      "answer": "domestic abuse",
+      "type": "wound",
+      "output": "The clang of the metal door echoed through the cell, bouncing off the cold, hard walls. \n\n\"Hey, John,\" I said, my voice barely a whisper.\n\n\"Hey, Mark,\" he replied, his voice gruff.\n\nWe were co-volunteers, here to help the inmates with their legal appeals. It was a chance for me to give back, to help those who needed it.\n\nJohn was a giant of a man, his body a testament to his past. He was the first person I'd met who looked exactly like the image I had in my head when I thought of a prison cell.\n\n\"How's it going?\" I asked, handing him a file.\n\n\"Fine,\" he said, his voice flat.\n\nI knew he wasn't fine. I knew what he'd been through.\n\n\"It's not going to be long now,\" I said.\n\nHe looked at me, his eyes filled with a pain I couldn't bear to look at.\n\n\"I'm not going to be here anymore,\" he said.\n\n\"I know,\" I said.\n\nHe was right. It was just a matter of time.\n\n\n"
+    },
+    "584": {
+      "setting": "bar",
+      "relationship": "professional and client",
+      "answer": "wistfulness",
+      "type": "emotion",
+      "output": "The amber liquid in the glass glowed like a beacon in the dim light of the bar.  \"Cheers,\" I said, raising my glass.\n\n\"Cheers,\" he replied, his voice a gravelly echo of my own words.\n\nHe was a giant of a man, his broad shoulders filling the space in front of me. I couldn't remember the last time I'd seen a face that wasn't smiling.\n\n\"This is the best bar in the city,\" he said, his eyes fixed on the amber liquid in his glass.\n\n\"Best bar in the city,\" I echoed, my voice catching in my throat.\n\nHe was right. It was the best bar in the city. \n\n\n"
+    },
+    "201": {
+      "setting": "slaughterhouse",
+      "relationship": "siblings",
+      "answer": "being disowned or shunned",
+      "type": "wound",
+      "output": "The metallic clang of the cleaver echoed through the vast, cavernous hall.  \n\n\"Liam, you're doing it wrong!\"\n\nThe sound of his brother's voice, booming and familiar, brought a surge of pain that ripped through Liam's chest. He looked up, his face a mask of misery.\n\n\"I know, I know,\" he mumbled, the words swallowed by the din of the slaughterhouse.\n\nHe was surrounded by the carnage, the blood-soaked floor a testament to the brutality of his reality. He had never been anywhere else.\n\n\"Liam, you're my brother,\" he said, his voice choked with emotion. \"You're family.\"\n\nLiam's heart hammered against his ribs, the familiar ache of abandonment echoing in his ears. He had been disowned years ago, cast out by the world, left to fend for himself.\n\n\"I know,\" he whispered, his voice barely audible above the din.\n\nHe was a ghost, a shadow of his former self. He had been lost, alone, and forgotten.\n\n\n"
+    },
+    "305": {
+      "setting": "circus",
+      "relationship": "protagonist and crush",
+      "answer": "being bullied",
+      "type": "wound",
+      "output": "The smell of popcorn and cotton candy hung thick in the air, a sweet assault on my senses. I stood frozen, staring at the towering figure of the man I'd been dreaming about for the past year. \n\n\"Hey!\" he boomed, his voice echoing through the tent. \"You alright?\"\n\nI blinked, my throat constricting. \"Yeah,\" I croaked, my voice barely a whisper.\n\nHe grinned, his teeth white against the red canvas. \"Come on, let's go!\"\n\nHe grabbed my hand, his touch sending a jolt of electricity through my body. I was a small, insignificant speck in this vast, colourful world.\n\n\"You're the best,\" I mumbled, my eyes fixed on his towering form.\n\nHe laughed, a sound that filled the tent. \"You know, I've never seen anyone so small.\"\n\nI swallowed, my heart pounding in my chest.\n\n\"You're the best,\" I repeated, my voice echoing through the tent.\n\n\n"
+    },
+    "1542": {
+      "setting": "desert",
+      "relationship": "siblings",
+      "answer": "trying to succeed where one has previously failed",
+      "type": "motivation",
+      "output": "The wind whipped around me, a familiar roar that swallowed all sound except the pounding of my own heart. I looked up, the sun a blazing white disc in the endless blue sky. \n\n\"You're doing it wrong, Liam!\"\n\nMy brother's voice, loud and clear, echoed across the barren landscape. I didn't need to look to know he was standing beside me, his face a mask of triumph.\n\n\"I know!\" I yelled back, my voice lost in the wind.\n\nThis was it. My chance to prove myself. To show him, to show everyone, that I could succeed where he had failed.\n\nI tightened my grip on the rope, the rough fibers digging into my palm. I had to keep going. I couldn't let him see me.\n\n\"Liam!\"\n\nHe was already climbing, his figure a dark silhouette against the blinding white. I looked up, my eyes stinging with tears. I had to do this. I had to succeed.\n\n\n"
+    },
+    "1891": {
+      "setting": "newsroom",
+      "relationship": "rivals",
+      "answer": "avoiding certain death",
+      "type": "motivation",
+      "output": "The air in the newsroom crackled with the familiar cacophony of shouting, ringing phones, and the clatter of keyboards.  \n\n\"You're not going to believe this, Jack!\" \n\nThe booming voice echoed through the room, a testament to the speaker's obvious success. Jack, hunched over his desk, barely looked up. \n\n\"I know what you did,\" he muttered, his voice barely audible above the din.\n\nAcross the room, a triumphant grin stretched across the face of his rival, a man whose name was synonymous with journalistic integrity. \n\n\"You're going to die,\" Jack said, his voice flat.\n\nThe grin widened. \"You're the one who's going to die.\"\n\nJack knew he couldn't move. He was trapped, his body frozen in place by the overwhelming terror that gripped him. \n\n\n"
+    },
+    "667": {
+      "setting": "psychic's shop",
+      "relationship": "host and guest",
+      "answer": "regret",
+      "type": "emotion",
+      "output": "The bell above the door jingled, announcing the arrival of another soul seeking solace.  \n\n\"Welcome,\" I said, my voice echoing in the cavernous shop.\n\n\"Hello,\" the guest replied, his voice thick with emotion.\n\nHe was a man, of course, and his face was a mask of regret. I knew what he was here for.\n\n\"I need to see him,\" he said, his voice cracking.\n\n\"He's gone,\" I said, my heart sinking.\n\nHe looked at me, his eyes wide with disbelief.\n\n\"He's gone?\"\n\n\"He's gone,\" I said, my voice echoing in the empty shop.\n\n\n"
+    },
+    "1947": {
+      "setting": "grotto",
+      "relationship": "grandparent and grandchild",
+      "answer": "realizing a dream",
+      "type": "motivation",
+      "output": "The air hung thick and warm, the sound of rushing water echoing through the cavern.  \n\n\"Grandpa!\"\n\nThe little girl's voice, bright and clear, bounced off the walls.\n\n\"Grandpa!\"\n\nHe smiled, his wrinkled face crinkling at the edges. \"That's me, little one.\"\n\nHe watched as the girl, his granddaughter, skipped towards him, her tiny hand outstretched.\n\n\"Look!\"\n\nHe took her hand, his own weathered one dwarfed by hers.\n\n\"Grandpa, you're a dream!\"\n\nHe laughed, a deep, booming sound that filled the grotto.\n\n\"You're a dream?\"\n\n\"You're a dream!\"\n\nHe squeezed her hand, his heart swelling with a warmth that chased away the chill of the cave. \n\n\"You're a dream!\"\n\n\n"
+    },
+    "1487": {
+      "setting": "casino",
+      "relationship": "adult child & elderly parent",
+      "answer": "letting others down",
+      "type": "fear",
+      "output": "The flashing lights and cacophony of sound assaulted Michael's ears. He gripped his father's hand, his own fear a tangible thing in the crowded casino.\n\n\"Dad, are you sure this is a good idea?\"\n\n\"Michael, it's a casino! You're here to win!\" His father's booming laughter echoed through the hall.\n\nMichael swallowed, his throat dry. \"I know, Dad. I know.\"\n\nHe watched as his father, a towering figure in his youth, now frail and stooped, placed a stack of bills on the table.\n\n\"Let's go!\"\n\nHe had to do this. He couldn't let his father down.\n\n\"Dad, this is a lot of money!\"\n\n\"Michael, it's your money!\"\n\nHe was already at the table, his hand reaching out to grab the bills.\n\n\"Dad!\"\n\nHe was too late.\n\n\nThe fear, a cold fist around his heart, squeezed tighter. He had to win. He had to let him see. \n\n\"Dad, I won!\" \n\n\nHe looked up, his face flushed, his voice echoing in the hall. \n"
+    },
+    "90": {
+      "setting": "mansion",
+      "relationship": "imaginary friend and child",
+      "answer": "being raised by neglectful parents",
+      "type": "wound",
+      "output": "The grand hall echoed with laughter, a sound that bounced off the marble walls and filled the empty space. \n\n\"Look, Leo! It's a castle!\"\n\nLeo, a small figure in a blue coat, stood frozen, his eyes wide with wonder. He reached out a hand, touching the cold, smooth surface of the wall.\n\n\"You're so small,\" boomed a voice.\n\nLeo giggled, his face splitting into a wide grin.\n\n\"You're so big!\"\n\nThe laughter echoed through the hall, bouncing off the walls and filling the empty space. \n\n\nLeo's heart soared. He was home. \n\n\nHe looked up at the towering figure, his face a mask of joy.\n\n\"Leo! You're so big!\"\n\nLeo's smile faltered. He looked down at his small hand, then up at the towering figure.\n\n\"You're so big!\"\n\nHe was home. \n\n\nHe was safe. \n\n\nHe was loved. \n"
+    },
+    "1710": {
+      "setting": "morgue",
+      "relationship": "imaginary friend and child",
+      "answer": "pursuing knowledge",
+      "type": "motivation",
+      "output": "\"Look, Timmy! It's a big, dead man!\"\n\nTimmy giggled, clapping his hands.\n\n\"He's sleeping,\" I said, pointing at the stainless steel table.\n\n\"Wake up!\" Timmy shouted, his voice echoing in the vast, cold room.\n\n\"He's sleeping forever,\" I said, my voice a whisper.\n\nTimmy's face crumpled. He ran to the table and touched the cold, lifeless body.\n\n\"He's gone?\"\n\n\"Gone?\" I said, my voice echoing in the empty room.\n\nTimmy looked at me, his eyes wide with fear.\n\n\"He's gone?\"\n\n\"Gone?\" I said, my voice echoing in the empty room.\n\n\n"
+    },
+    "897": {
+      "setting": "trailer park",
+      "relationship": "boss and employee",
+      "answer": "despair",
+      "type": "emotion",
+      "output": "The rusty trailer door swung open, revealing a scene of utter devastation.  \n\n\"Frank,\" I said, my voice a hollow echo in the vast emptiness.\n\nFrank stood in the middle of the trailer, his face pale and drawn. He looked like a man who had lost everything, which he had.\n\n\"You alright, Frank?\"\n\nHe didn't answer.\n\n\"Frank!\"\n\nHe turned, his eyes wide and vacant.\n\n\"You're the boss,\" he said, his voice a raspy whisper.\n\n\"I know.\"\n\nHe looked at me, his face contorted in a grimace of despair.\n\n\"You're the boss,\" he said again.\n\n\n"
+    },
+    "680": {
+      "setting": "winery",
+      "relationship": "editor and author",
+      "answer": "acceptance",
+      "type": "emotion",
+      "output": "The air hung thick with the scent of fermenting grapes.  \n\n\"It's done,\" I said, my voice barely a whisper.\n\nHe smiled, a wide, genuine grin that stretched across his face. \"It's perfect.\"\n\nI stared at the bottle in my hand, the label bearing my name. It was a moment I'd been waiting for, a moment I'd dreamed of since I was a child. \n\n\"It's...it's beautiful,\" I said, my throat tight.\n\nHe reached out and squeezed my shoulder. \"You did it.\"\n\nTears welled up in my eyes, blurring the world around me. This was it. Acceptance. \n\n\n"
+    },
+    "1270": {
+      "setting": "medieval village",
+      "relationship": "service provider and customer",
+      "answer": "losing the respect of others",
+      "type": "fear",
+      "output": "The clang of metal against stone echoed through the village square. A cheer erupted from the crowd, and Thomas, the blacksmith, grinned, wiping the sweat from his brow. He had finally finished the sword, a masterpiece of steel and craftsmanship. \n\n\"It's beautiful!\" cried a voice.\n\nThomas turned, his heart swelling with pride. \"It's finished, sir. The finest sword in the land.\"\n\nSir Gareth, the village knight, stood before him, his face beaming.\n\n\"You've done it again, Thomas. The best blacksmith in the realm!\"\n\nThomas's fear, a monstrous thing he had tried to bury deep within himself, reared its ugly head. He was no longer a child, no longer the apprentice who had learned the trade from his father. He was the master, the one everyone looked to for their weapons.\n\n\"Sir Gareth, please,\" he said, his voice trembling. \"It's just a sword.\"\n\nSir Gareth laughed, clapping him on the shoulder. \"Just a sword? You call this just a sword?\"\n\nThomas looked at the gleaming blade, his own name etched into the metal. He had worked tirelessly, pouring his heart and soul into the creation. He was no longer the boy who had dreamed of becoming a knight. He was the master, the one everyone looked to for their weapons.\n\n\"Sir Gareth, please,\" he said, his voice barely a whisper. \"It's just a sword.\"\n\n\n"
+    },
+    "536": {
+      "setting": "laundromat",
+      "relationship": "service provider and customer",
+      "answer": "overwhelmed",
+      "type": "emotion",
+      "output": "The fluorescent lights buzzed overhead, casting a sterile glow on the mountain of clothes piled in front of me. I stared, numb, at the overflowing washing machine, its door ajar, revealing the swirling chaos within. \n\n\"Everything alright?\"\n\nThe cheerful voice sliced through the din, bringing me back to the present.\n\n\"Yes,\" I croaked, my throat dry. \"Everything's fine.\"\n\nThe man behind the counter, a mountain of a figure in a crisp white uniform, smiled. \"Just need to wash your clothes?\" \n\nI nodded, my head throbbing. \n\nHe gestured to the machine. \"Just put them in.\" \n\n\n"
+    },
+    "52": {
+      "setting": "rock concert",
+      "relationship": "protagonist and crush",
+      "answer": "a home invasion",
+      "type": "wound",
+      "output": "The roar of the crowd was deafening, a symphony of sound that washed over me, drowning out the world. I was finally here, at the rock concert of a lifetime, with my crush, Liam. He grinned at me, his eyes sparkling with excitement.\n\n\"This is amazing!\" he shouted over the din.\n\n\"I know!\" I yelled back, my voice lost in the cacophony.\n\nThis was it. The moment I'd been waiting for. I was finally able to show Liam who I was, who I always had been.\n\nHe reached out, his hand engulfing mine. I squeezed back, a smile plastered on my face.\n\n\"This is the best day ever!\" Liam shouted, his voice echoing in my ears.\n\nThe music pulsed through my body, a wave of sound that crashed over me. I was safe. I was happy.\n\nBut the world around me blurred, the sound fading into a distant memory. I was back in my house, the door splintered, the walls covered in blood.\n\n\"Liam!\" I screamed, my voice lost in the roar of the crowd.\n\n\n"
+    },
+    "148": {
+      "setting": "winery",
+      "relationship": "acquaintances",
+      "answer": "being disappointed by a role model",
+      "type": "wound",
+      "output": "The air hung thick with the scent of ripe grapes, a symphony of colour assaulting my eyes. I stood beside the stainless steel tank, watching the liquid gold sloshing inside. \n\n\"Amazing, isn't it?\" \n\nI turned to see him, a broad smile plastered across his face. \n\n\"It's... beautiful,\" I said, my voice barely a whisper.\n\nHe chuckled, clapping a hand on my shoulder. \"You're here for the tasting, right?\"\n\nI nodded, my throat too tight to speak.\n\nThis was it. The moment I'd been waiting for, the chance to finally meet the man who had inspired me to pursue my own dreams. \n\nHe was everything I'd hoped for, a giant amongst men, a legend in the world of winemaking.\n\n\"Come on,\" he said, grabbing my arm and pulling me towards the tasting room. \"Let's have a drink.\"\n\n\n"
+    },
+    "242": {
+      "setting": "medieval castle armory",
+      "relationship": "master and apprentice",
+      "answer": "living in a dangerous neighborhood",
+      "type": "wound",
+      "output": "The clang of metal echoed through the vast, cavernous hall.  \n\n\"Again, Thomas!\" roared Master Alaric, his voice booming through the chamber.\n\nThomas, a young man barely out of boyhood, flinched and raised his sword arm, the polished steel glinting in the torchlight. He swung the heavy blade, the impact sending a shockwave through his arm.\n\n\"Master Alaric!\"\n\nHe looked up, his face contorted in pain.\n\n\"You are a fool!\" Alaric bellowed, his face red with anger. \"This is not a game!\"\n\nThomas swallowed, his throat dry. \"Master Alaric, I am hurt!\"\n\nHe knew he had to be strong. He had to prove himself. He had to survive.\n\n\"Survive?\" Alaric laughed, a harsh, grating sound. \"You are alive!\"\n\nHe watched as Thomas, his face pale, struggled to stand.\n\n\"Master Alaric, please!\"\n\nHe had never experienced anything like this before. He had lived in a dangerous neighborhood, but this was different. This was real.\n\n\"Master Alaric!\"\n\n\n"
+    },
+    "1029": {
+      "setting": "tool shed",
+      "relationship": "headmaster and student",
+      "answer": "losing autonomy",
+      "type": "fear",
+      "output": "The air inside the tool shed was thick with the scent of sawdust and metal.  \n\n\"This is it, Thomas,\" Headmaster Blackwood said, his voice booming in the confined space. \"The future.\"\n\nThomas stared at the gleaming, silver contraption in front of him. It was a marvel of engineering, a machine that could build anything. \n\n\"It's... beautiful,\" Thomas whispered, his voice barely audible.\n\n\"Beautiful?\" Blackwood laughed, a sound that echoed through the shed. \"It's perfect. You'll be the first to use it.\"\n\nThomas knew. He was the only one who could.\n\nHe reached out, his hand trembling, and touched the cold metal. \n\n\"This is your future, Thomas. Your destiny.\"\n\nBlackwood's words were a hammer blow to Thomas's already fragile mind. He was a student, a scholar, not a builder. He had no control over this.\n\n\"It's... mine?\"\n\nBlackwood smiled, a wide, toothy grin.\n\n\"Yours.\"\n\n\nThe fear, a cold, hard knot in his chest, tightened. He was losing everything. \n"
+    },
+    "499": {
+      "setting": "liquor store",
+      "relationship": "adult child & elderly parent",
+      "answer": "a sibling's betrayal",
+      "type": "wound",
+      "output": "The fluorescent lights hummed above, casting a sterile glow on the aisles stacked high with bottles of amber liquid. \n\n\"Dad, are you sure this is the right place?\"\n\n\"Of course, it is. This is the best liquor store in the city.\"\n\nJohn watched as his father, a towering figure in his youth now reduced to a frail shell, shuffled down the aisle, his hand gripping the shopping cart. \n\n\"Dad, I told you, this is a liquor store.\"\n\nJohn's voice echoed in the cavernous space. He felt a familiar pang in his chest, a sharp, stabbing pain that never seemed to go away. \n\n\"Dad, I'm sorry.\"\n\nHe reached out and grabbed his father's arm, his touch firm and reassuring.\n\n\"Dad, I'm your son.\"\n\n\n"
+    },
+    "1682": {
+      "setting": "police car",
+      "relationship": "exes",
+      "answer": "achieving dominion over another (dark)",
+      "type": "motivation",
+      "output": "The flashing red and blue lights painted the interior of the police car a nauseating strobe.  \n\n\"You're not going to believe this,\" I said, my voice a strained whisper.\n\n\"I know,\" he said, his face a mask of grim satisfaction.\n\nHe was the only person I'd ever loved. The only person who knew my name.\n\n\"You're going to be the first one to see it,\" I said, my hand reaching out to touch the metal cage that separated us.\n\nHe didn't flinch.\n\n\"You're going to be the first one to see it,\" I repeated, my voice echoing in the confined space.\n\nHe was the one who had taken my name, my life, everything.\n\n\"You're going to be the first one to see it,\" I said, my voice a guttural roar.\n\nHe was the one who had given me dominion over another.\n\n\n"
+    },
+    "70": {
+      "setting": "beach party",
+      "relationship": "siblings",
+      "answer": "infertility",
+      "type": "wound",
+      "output": "The roar of the waves crashing against the shore was a familiar, comforting sound.  \n\n\"Come on, Liam! You're going to miss it!\"\n\nLiam watched as his sister, Sarah, ran towards the water, her laughter echoing across the beach. He couldn't help but smile. It was a day he'd been waiting for, a day he'd never forget.\n\n\"Liam!\"\n\nHe turned, his heart pounding.\n\n\"You're going to be a dad!\"\n\nHe looked at Sarah, her face beaming with joy. He knew what she was saying. He knew what he was.\n\nHe reached out, his hand trembling, and touched his own chest.\n\n\"I'm sorry,\" he whispered. \n\n\n"
+    },
+    "540": {
+      "setting": "prison cell",
+      "relationship": "protagonist and crush",
+      "answer": "humbled",
+      "type": "emotion",
+      "output": "The clang of the metal door echoed through the cell, bouncing off the cold, hard walls. I stared at the bars, my face flushed, a stupid grin plastered across my face. \n\n\"You alright, mate?\"\n\nI looked up, my heart hammering against my ribs. He was standing there, his face a mask of concern.\n\n\"Yeah,\" I croaked, my voice barely a whisper. \"Just... you know...\"\n\nHe chuckled, a deep, booming sound that filled the cell. \"You look like you've seen a ghost.\"\n\nI couldn't move, couldn't speak. He was the only person I'd ever seen in my life who could make me feel this way.\n\n\"Come on, mate,\" he said, his voice gentle. \"I'm here.\"\n\nHe reached out, his hand brushing against my cheek. I closed my eyes, my face burning.\n\n\"You're... you're...\"\n\nI couldn't say it. I was humbled. \n\n\n"
+    },
+    "873": {
+      "setting": "wedding reception",
+      "relationship": "nanny and child",
+      "answer": "wanderlust",
+      "type": "emotion",
+      "output": "The music thumped, a joyous cacophony that echoed through the vast hall. Laughter and cheers erupted around me, a symphony of celebration. I smiled, my face aching, at the spectacle before me. \n\n\"Look, Lily!\" I said, my voice lost in the din. \"It's a big party!\"\n\nLily, her tiny hand clutching my finger, stared wide-eyed at the scene. \n\n\"Big party,\" she repeated, her voice a high-pitched squeal.\n\nThis was it. The moment I'd been waiting for. The moment I knew I had to leave.\n\n\"Come on, Lily,\" I said, gently pulling her towards the throng of people. \n\nShe giggled, her laughter echoing my own, a bittersweet melody. \n\n\"Lily, this is your daddy,\" I said, pointing at a tall man in a tuxedo.\n\nLily, her eyes shining, ran towards him, her tiny hand reaching out.\n\n\"Daddy!\" she cried.\n\nI watched, my heart swelling with a familiar ache. This was my purpose. To bring Lily to her father.\n\nBut the wanderlust, a constant companion, roared within me. \n\n\"Lily, this is your mommy,\" I said, pointing at a beautiful woman in a white dress.\n\nLily, her face beaming, ran towards her.\n\n\"Mommy!\" she cried.\n\nI smiled, my face aching.\n\n\"Lily, this is your\u2026\"\n\nI stopped, my voice choked with emotion.\n\n\"Lily!\"\n\n\n"
+    },
+    "219": {
+      "setting": "coffeehouse",
+      "relationship": "teacher and student",
+      "answer": "being forced to keep a dark secret",
+      "type": "wound",
+      "output": "The aroma of freshly brewed coffee filled the air, a comforting scent that did little to soothe the churning in Amelia's stomach. Across the table, Mr. Davies, her history teacher, smiled warmly.\n\n\"Amelia, this is fantastic! You've aced the exam.\"\n\nAmelia forced a smile back, her throat constricting. \"Thank you, Mr. Davies. I studied hard.\"\n\nShe watched as he scribbled something on a piece of paper, then held it up. \"Here you go.\"\n\nAmelia reached out, her hand trembling. The paper was heavy in her grasp.\n\n\"Mr. Davies,\" she whispered, her voice cracking.\n\nHe chuckled, \"Amelia, you're the best student I've ever had.\"\n\nAmelia looked at the paper, her eyes welling up. It was a certificate, a testament to her achievement.\n\n\"Mr. Davies,\" she choked out, \"I need to tell you something.\"\n\nHe smiled, \"I know, Amelia. You've aced the exam.\"\n\n\nAmelia's heart sank. The world around her blurred, the coffeehouse fading into a sea of faces. She had to tell him. This wasn't a secret she could keep any longer. \n\n\"Mr. Davies,\" she said, her voice barely a whisper. \"This is not what you think.\" \n\n\nThe world around her was silent. \n"
+    },
+    "297": {
+      "setting": "used car dealership",
+      "relationship": "host and guest",
+      "answer": "being unfairly blamed for someone's death",
+      "type": "wound",
+      "output": "The air inside the dealership was thick with the smell of gasoline and the roar of engines.  \n\n\"This is it, Mr. Jones. The car you've been looking for,\" said Frank, his voice booming over the din.\n\nFrank was a giant of a man, his smile as wide as the showroom floor. He clapped a hand on John's shoulder, the touch heavy and familiar.\n\n\"It's beautiful,\" John said, his voice a raspy whisper.\n\nHe stared at the gleaming red car, its polished surface reflecting his own pale face.\n\n\"It's a dream come true,\" Frank said, his voice echoing in the vast space.\n\nJohn swallowed, his throat dry. He had to get out of there.\n\n\"It's a dream come true,\" he repeated, his voice barely audible.\n\nHe turned and walked away, the roar of the engines drowning out his own voice.\n\n\nJohn had been unfairly blamed for someone's death. He had been a child then, but the memory of the event was seared into his mind. He had never been able to escape the weight of the accusation.\n\nHe had to get out of there. \n\nHe had to get home. \n\n\n"
+    },
+    "1619": {
+      "setting": "secret passageway",
+      "relationship": "editor and author",
+      "answer": "protecting a loved one",
+      "type": "motivation",
+      "output": "\"This is insane!\"\n\nThe words echoed through the cavernous passageway, bouncing off the stone walls. \n\n\"It's not insane!\"\n\nThe author, a man whose name was already legendary in the world of literature, stood frozen, his face pale.\n\n\"It's not insane!\"\n\nThe editor, a woman whose sharp wit was matched only by her unwavering loyalty, held out a hand, her face a mask of grim determination.\n\n\"You need to get out of here.\"\n\nThe author, his voice choked with emotion, looked at her.\n\n\"You know what I'm going to do.\"\n\n\"No!\"\n\nThe author took a step back, his eyes wide with fear.\n\n\"I have to protect them.\"\n\nHe turned and ran, disappearing into the darkness. \n\n\n"
+    },
+    "646": {
+      "setting": "run-down apartment",
+      "relationship": "exes",
+      "answer": "tormented",
+      "type": "emotion",
+      "output": "The air hung thick and stale, a miasma of dust and regret.  He stood in the middle of the room, his eyes fixed on the ceiling, a silent testament to the torment that consumed him. \n\n\"It's over,\" he croaked, the word a rasp against the silence.\n\n\"I know,\" she said, her voice flat and emotionless.\n\nHe didn't need to look to know she was standing there, a ghost of the past haunting his present. \n\nHe reached out a hand, his fingers brushing against the empty air. \n\n\"Come back,\" he whispered, the words choked by a sob. \n\n\n"
+    },
+    "1005": {
+      "setting": "public restroom",
+      "relationship": "protagonist and crush",
+      "answer": "being taken advantage of",
+      "type": "fear",
+      "output": "The fluorescent lights buzzed overhead, casting a sickly yellow glow on the pristine white tiles. I stared at my reflection, my face a mask of disbelief. \n\n\"This is it,\" I whispered, my voice echoing in the cavernous space.\n\nI was trapped. Not physically, of course, but mentally. I couldn't move, couldn't breathe. \n\n\"Hey,\" a familiar voice boomed from behind me.\n\nMy heart leaped into my throat.\n\n\"You okay?\"\n\nI turned, my eyes fixed on the smiling face of Liam, my crush.\n\n\"Liam!\"\n\nHe grinned, his eyes sparkling with amusement.\n\n\"You look like you've seen a ghost.\"\n\nI couldn't speak. I was frozen, my fear a tangible thing, pressing down on me.\n\n\"Liam,\" I croaked, my voice a mere whisper.\n\nHe reached out, his hand hovering inches from my face.\n\n\"Liam!\"\n\nI scrambled back, my hand clutching my chest.\n\n\"Liam!\"\n\n\nThis was it. The moment I'd been waiting for, but not like this. \n\n\n"
+    },
+    "651": {
+      "setting": "nursery",
+      "relationship": "friends",
+      "answer": "betrayed",
+      "type": "emotion",
+      "output": "The air hung thick with the scent of disinfectant and the high-pitched squeals of laughter echoed through the room.  \n\n\"This is it, Liam! You're the best friend a guy could ask for!\"\n\nLiam's grin was wide, his eyes shining with an emotion that mirrored the joyous scene around him. He held up a small, brightly coloured rattle, its cheerful jingle a testament to the day's events.\n\n\"You're the best friend a guy could ask for!\" Liam repeated, his voice booming through the nursery.\n\nThe word \"best friend\" hung in the air, a sharp, painful reminder of the betrayal that had shattered his world. \n\n\"Liam,\" I whispered, my voice choked with emotion. \n\n\n"
+    },
+    "903": {
+      "setting": "funeral home",
+      "relationship": "twins",
+      "answer": "desire",
+      "type": "emotion",
+      "output": "The air hung thick and cold, the scent of lilies suffocating.  \n\n\"It's him,\" I whispered, my voice cracking.\n\n\"I know,\" she said, her hand gripping mine.\n\nWe stood there, side by side, staring at the lifeless form in the glass coffin. It was him. My brother.\n\nMy desire, a burning inferno in my chest, threatened to consume me. \n\n\n"
+    },
+    "1533": {
+      "setting": "dorm room",
+      "relationship": "therapist and patient",
+      "answer": "serving others",
+      "type": "motivation",
+      "output": "The door swung open, revealing a sea of colourful posters and overflowing textbooks. \"Come in, come in!\" Dr. Evans beamed, his smile as bright as the sun outside.\n\n\"Dr. Evans,\" I said, my voice barely a whisper.\n\n\"Please, call me David,\" he said, his eyes twinkling.\n\nI swallowed, my throat dry. \"David.\"\n\nHe gestured to the chair opposite him, \"Have a seat.\"\n\nThis was it. I was finally here, ready to serve others. \n\n\"I'm here to help,\" David said, his voice booming.\n\nI looked around the room, the posters a kaleidoscope of colours, the books stacked high. This was a place of healing, a sanctuary.\n\n\"I want to be a doctor,\" I said, my voice cracking.\n\n\"That's wonderful!\" David exclaimed, his smile widening.\n\nI felt a surge of emotion, a warmth spreading through my chest. This was what I was meant to do.\n\n\"I want to help people,\" I said, my voice strong and clear.\n\n\"You're already helping people,\" David said, his voice booming.\n\n\n"
+    },
+    "1941": {
+      "setting": "ice cream parlor",
+      "relationship": "boss and employee",
+      "answer": "making someone proud",
+      "type": "motivation",
+      "output": "The whirring of the ice cream machine was a symphony of sound, a familiar melody that filled the air with the sweet scent of vanilla.  \n\n\"This is it, Liam,\" said Mr. Henderson, his voice booming over the din. \"The best ice cream you've ever seen.\"\n\nLiam stared at the towering mountain of scoops, his heart pounding in his chest. He'd never seen anything like it.\n\n\"Mr. Henderson, this is... amazing!\"\n\nHe knew this was it. This was the moment he'd been waiting for, the moment he'd prove to everyone, and himself, that he was worthy.\n\n\"Mr. Henderson, this is... amazing!\"\n\nHe knew this was it. This was the moment he'd been waiting for, the moment he'd prove to everyone, and himself, that he was worthy.\n\n\n"
+    },
+    "569": {
+      "setting": "convenience store",
+      "relationship": "spouses in a forced marriage",
+      "answer": "anxiety",
+      "type": "emotion",
+      "output": "The fluorescent lights buzzed overhead, casting a sickly yellow glow on the aisles stacked high with brightly coloured boxes.  \n\n\"This is it,\" I said, my voice barely a whisper.\n\n\"I know,\" he replied, his hand gripping my arm so tightly I winced.\n\nWe stood in the middle of the store, surrounded by the cacophony of beeps and the shouts of customers. I couldn't move. My heart hammered against my ribs, threatening to burst out of my chest.\n\n\"This is what we came for,\" he said, his voice tight.\n\nI stared at the shelves, my eyes tracing the familiar rows of products. This was a place I'd been to countless times before, but now it felt like a prison.\n\n\"I'm sorry,\" I choked out.\n\nHe squeezed my arm again, his face contorted in a grimace.\n\n\"Don't say that,\" he said.\n\nI knew he meant it. This wasn't a place for apologies.\n\n\n"
+    },
+    "199": {
+      "setting": "cheap motel",
+      "relationship": "stepparent and stepchild",
+      "answer": "being let down by a trusted organization or social system",
+      "type": "wound",
+      "output": "The flickering neon sign outside cast a lurid green glow across the cracked asphalt.  \n\n\"This is it, kiddo,\" said Frank, his voice booming in the empty room.\n\n\"I know,\" said Liam, staring at the worn-out carpet.\n\nFrank clapped a hand on Liam's shoulder, the weight of it crushing him.\n\n\"Don't worry, this is just a temporary stop.\"\n\nLiam knew. This wasn't a temporary stop.\n\nHe looked up at the man who had been his father for the past ten years, his face a mask of pain.\n\n\"It's just a motel,\" he said, his voice cracking.\n\nFrank's face softened. \"It's just a motel.\"\n\nLiam swallowed, the lump in his throat refusing to move.\n\n\"It's just a motel,\" he repeated, the words echoing in the empty room.\n\n\nHe had been let down by the system, by the organization that was supposed to protect him. He had been taken in by Frank, his father's best friend, his life a whirlwind of moving from one place to another.\n\n\"It's just a motel,\" Frank said again, his voice thick with emotion.\n\nLiam looked at him, his eyes filled with tears.\n\n\"It's just a motel,\" he said, his voice a whisper.\n\n\nHe was alone. \n"
+    },
+    "1391": {
+      "setting": "county fair",
+      "relationship": "acquaintances",
+      "answer": "conditional love",
+      "type": "fear",
+      "output": "The Ferris wheel groaned, its metal skeleton a skeletal silhouette against the bruised sky. \n\n\"You coming?\"\n\nThe question was a statement, a fact I already knew. I stared at the towering structure, my stomach churning.\n\n\"It's amazing,\" Sarah said, her voice a bright chime above the cacophony of the fair.\n\n\"Amazing,\" I echoed, my voice a hollow rasp.\n\nThis was it. The moment I'd been waiting for, the moment I'd been dreading.\n\n\"You're coming, right?\"\n\nSarah's smile was wide, her eyes sparkling with an unyielding joy.\n\n\"Right,\" I said, my voice barely audible.\n\nThe Ferris wheel was a monument to my fear, a giant metal cage that held my fate in its iron grip.\n\n\"You're the best friend I have,\" Sarah said, her words a balm to my raw fear.\n\n\"Best friend,\" I whispered, the word a foreign object in my mouth.\n\nThe world spun around me, the carnival lights blurring into a kaleidoscope of color.\n\n\"You're coming, right?\"\n\n\n"
+    },
+    "694": {
+      "setting": "fishing boat",
+      "relationship": "enemies",
+      "answer": "rage",
+      "type": "emotion",
+      "output": "The salt spray stung my face, a familiar sting that did nothing to soothe the inferno raging within me. \"You bloody idiot!\" I roared, my voice swallowed by the howling wind. \n\n\"You think this is a joke?\" I spat, the word echoing across the vast, empty ocean. \n\nHe just laughed, a harsh, grating sound that sent shivers down my spine. \"You're the one who said you'd teach me how to fish!\" \n\nHe was right, of course. This was my fault. But the sight of his smug grin, the triumphant glint in his eye, was enough to ignite the rage that had been simmering for years. \n\n\"Get out!\" I yelled, my hand clenching into a fist. \n\n\n"
+    },
+    "311": {
+      "setting": "tropical island",
+      "relationship": "service provider and customer",
+      "answer": "childhood sexual abuse by a known person",
+      "type": "wound",
+      "output": "The air hung thick and heavy, the scent of salt and sunshine filling my lungs. I smiled, a wide, bright grin, at the man standing before me. \"Welcome to Paradise Island! The best place on Earth.\"\n\nHe chuckled, a deep, booming sound that echoed across the beach. \"Best place on Earth, indeed.\"\n\nI was a beacon of joy, a ray of sunshine in this tropical paradise. I was the service provider, the one who brought smiles to people's faces. I was the one who helped them forget their troubles.\n\n\"Come on, let's go!\" I said, grabbing his arm.\n\nHe laughed, a sound that brought back a flood of memories. A memory I had tried so hard to bury.\n\n\"You're a good man,\" he said, his voice thick with emotion.\n\nI looked at him, my smile frozen in place. \"You're a good man,\" I repeated, the words echoing in my ears.\n\nThe world around me faded away. I was back in the past, a small child, surrounded by the laughter and joy of my family.\n\n\"You're a good man,\" I whispered.\n\n\n"
+    },
+    "1740": {
+      "setting": "car wash",
+      "relationship": "one-night-stand lovers",
+      "answer": "pursuing a passion",
+      "type": "motivation",
+      "output": "The roar of the car wash drowned out the world.  \n\n\"This is it,\" I said, my voice barely audible above the din.\n\n\"I know,\" she said, her hand gripping my arm.\n\nWe were both soaked, our clothes clinging to our bodies, a testament to the passion we'd shared the night before.  \n\n\"This is what I've been waiting for,\" she said, her eyes shining.\n\nI smiled, my heart swelling with a joy I hadn't felt in years. \n\n\"Go,\" I said, pushing her towards the exit. \n\n\n"
+    }
+  }
+}
